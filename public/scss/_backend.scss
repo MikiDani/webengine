@@ -1,0 +1,53 @@
+// BACKEND MENU
+
+.backend-menu-text > ul {
+    align-items: center;
+    text-align: center;
+}
+
+.backend-menu-text > ul > li {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    
+    & > a {
+        display: inline-block;
+        text-align: center;
+        color: $color-01 !important;
+
+        margin-left: 0.7rem;
+        margin-right: 0.7rem;
+
+        text-decoration: none;
+        font-weight: bold;
+        &:hover {
+            text-decoration: underline;
+            text-underline-offset: 0.5rem;
+            text-decoration-thickness: 3px;
+            text-decoration-color: $color-underline-primary !important;
+            -moz-text-decoration-color: $color-underline-primary !important;
+}
+    }
+}
+
+.custom-toggler {
+    border: none;
+    padding: 0.2rem;
+    background-color: $color-gold-01;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+.admin-login-logo {
+    width: 4rem;
+}
+
+.admin-menu-logo {
+    width: 3rem;
+}

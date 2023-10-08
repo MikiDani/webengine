@@ -11,9 +11,4 @@ class FrontendController extends Controller
         session()->flash('message', 'Welcome to the page!');
         return view('frontend');
     }
-
-    public function test() {
-        session()->flash('message', 'Welcome to TEST page!');
-        return view('test');
-    }
 }

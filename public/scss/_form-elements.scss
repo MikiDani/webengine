@@ -1,0 +1,41 @@
+.link-1 {
+    cursor: pointer;
+    &:hover {
+        & > span {
+            text-decoration: underline;
+            text-underline-offset: 0.5rem;
+            text-decoration-thickness: 2px;
+            text-decoration-color: $color-underline-primary !important;
+            -moz-text-decoration-color: $color-underline-primary !important;
+            font-weight: bold;
+}
+        & > span > i {
+            color:$primary;
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.link1 > span > i:hover {
+    color: $primary;
+}
+
+.login-distance {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 5rem;
+}
+
+.width-95 { width: 95%; }
+.width-90 { width: 90%; }
+.width-85 { width: 85%; }
+.width-80 { width: 80%; }
+.width-05 { width: 05%; }
+.width-10 { width: 10%; }
+.width-15 { width: 15%; }
+.width-20 { width: 20%; }
+
+.text-italic {
+    font-style: italic;
+}

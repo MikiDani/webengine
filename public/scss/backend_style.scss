@@ -1,0 +1,30 @@
+
+$primary: #1fb71f;
+$secondary: #5cf45c;
+$danger: #ff4136;
+
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "danger": $danger
+    );
+
+$color-01: #191919;
+$color-gold-01: gold;
+$color-underline-primary: $primary;
+$color-underline-gold: gold;
+
+
+@import "../modules/bootstrap/scss/bootstrap";
+
+@import 'form-elements';
+@import 'backend';
+
+.full-win {
+    width: 100vw;
+    height:100vh;
+}
+
+.card {
+    max-width: 1000px;
+}

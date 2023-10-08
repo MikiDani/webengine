@@ -16,21 +16,28 @@
     <link rel="stylesheet" href="/scss/style.css">
 </head>
 <body class="bg-light">
+    @if (Auth::check()) 
+        <div class="bg-dark p-3 text-center border-bottom border-info mb-3">
+            <a href="{{route('admin_index')}}" class="btn btn-primary">admin_INDEX</a>
+        </div>
+    @else
+        <div class="bg-dark p-3 text-center border-bottom border-info mb-3">
+            <a href="{{route('admin_login')}}" class="btn btn-primary">admin_login</a>
+        </div>
+    @endif
 	<div id="root" class="container p-0 m-0 mx-auto">
         <div class="bg-warning p-3">
 
-            <div class="p-3 bg-info">
+            <div class="p-3 bg-info text-center">
+                @if(session('message'))
+                    <h6 class="p-0 m-0">{!! session('message') !!}</h6>
+                    @php session()->forget('message'); @endphp
+                @endif
+                <br>
                 @if (Auth::check())
                     HELLÓ {{ Auth::user()->name }} !!!
                 @endif
             </div>
-
-            <p>Ez lesz a START OLDAL.</p>
-            <a href="{{route('test')}}" class="btn btn-primary">TEST OLDAL</a>
-
-
-            <a href="{{route('admin_login')}}" class="btn btn-primary">admin_login</a>
-            <a href="{{route('admin_index')}}" class="btn btn-primary">admin_INDEX</a>
         </div>
 	</div>
     <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

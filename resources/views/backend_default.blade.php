@@ -12,15 +12,14 @@
     <link rel="manifest" href="/img/favicons/site.webmanifest">
     <link rel="shortcut icon" href="/img/favicons/favicon.ico">
     <link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/scss/style.css">
+    <link rel="stylesheet" href="/modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/scss/backend_style.css">
 </head>
 <body class="bg-dark">
-	<div id="root" class="container p-0 m-0 mx-auto">
-		@yield('content')
-	</div>
+	@yield('content')
     <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/modules/jquery/dist/jquery.min.js"></script>
-    <script src="/js/admin.js"></script>
+    @yield('page_js')
     <script>
 	    window.jQuery.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
     </script>
