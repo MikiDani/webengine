@@ -28,10 +28,10 @@
                 </div>
                 <form method="POST" action="{{route('admin_newpass_post')}}">
                     @csrf
-                    <label class="mt-3">Password</label>
-                    <input type="password" name="password" value="12345678" class="form-control mt-2" minlength="8" maxlength="255" required>
+                    <label class="mt-3">New Password</label>
+                    <input type="password" name="password" class="form-control mt-2" minlength="8" maxlength="255" autocomplete="off" required>
                     <label class="mt-3">Repeat password</label>
-                    <input type="password" name="re_password" class="form-control mt-2 mb-5" minlength="8" maxlength="255" required>
+                    <input type="password" name="re_password" class="form-control mt-2 mb-5" minlength="8" maxlength="255" autocomplete="off" required>
                     <div class="row p-0 m-0">
                         <button type="submit" class="btn btn-lg bg-primary text-uppercase text-white">Save</button>
                     </div>

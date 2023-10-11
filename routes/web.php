@@ -15,9 +15,13 @@ Route::middleware(['auth'])->group(function() {
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
     Route::get ('/admin/login', [AuthenticationController::class, 'admin_login'])->name('admin_login');
     Route::post('/admin/login', [AuthenticationController::class, 'admin_login_post'])->name('admin_login_post');
+    
     Route::post('/admin/forgotemail', [AuthenticationController::class, 'admin_forgotemail_post'])->name('admin_forgotemail_post');
 
-    Route::get('/admin/newpass/{identification?}', [AuthenticationController::class, 'admin_newpass'])->name('admin_newpass');
+    Route::get('/admin/confirm}', [AuthenticationController::class, 'admin_confirmation'])->name
+    ('admin_confirmation');
+
+    Route::get('/admin/newpass', [AuthenticationController::class, 'admin_newpass'])->name('admin_newpass');
     Route::post('/admin/newpass', [AuthenticationController::class, 'admin_newpass_post'])->name('admin_newpass_post');
 });
 

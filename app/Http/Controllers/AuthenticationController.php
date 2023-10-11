@@ -9,10 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Forgotemail;
-
 use App\Mail\SimpleEmail;
-
-
 
 class AuthenticationController extends Controller
 {
@@ -106,10 +103,13 @@ class AuthenticationController extends Controller
 
         if ($allReady)
         {
+            $identifier = md5(rand(1000000000, 9999999999));
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'identifier' => $identifier,
                 'rank' => 0
             ]);
 
@@ -339,35 +339,54 @@ class AuthenticationController extends Controller
 
         if ($validator->fails()) {
             session()->flash('message', '<span class="text-danger">You did not enter the e-mail address format.</span>');
-            return view('backend.admin_login');
+            return redirect()->route('admin_login');
         }
 
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             session()->flash('message', '<span class="text-danger">Incorrect email entry.</span>');
-            return view('backend.admin_login');
+            return redirect()->route('admin_login');
         }
 
-        //dd($request->email);
-
         $toEmail = $request->email;
-        $subject = 'Teszt e-mail';
-        $message = 'Ez egy teszt e-mail a Laravelből.';
-    
-        Mail::to($toEmail)->send(new ForgotEmail($subject, $message));
+        
+        Mail::to($toEmail)->send(new ForgotEmail($toEmail));
 
         session()->flash('message', '<span class="text-black">We have sent the letter to your address.</span> <span class="text-primary text-italic">'.$request->email.'</span> <span class="text-black"> Check your letters!');
         return view('backend.admin_login');
     }
 
-    public function admin_newpass($identification = null)
+    public function admin_confirmation(Request $request)
     {
-        dump($identification);
+        dump($request);
+
+        dd();
 
         session()->flash('message', '<span class="text-black">Helló Newcommer!</span>');
-        return view('backend.admin_newpass');
+        return view('backend.admin_login');
 
     }
+    public function admin_newpass(Request $request)
+    {
+        $getuserid = $request->id;
+        $user = User::find($getuserid);
+    
+        if ($user) {
+            $hashed_identifier = $request->identifier;
+        } else {
+            return redirect()->route('admin_login');
+        }
+        
+        if (Hash::check($user->identifier, $hashed_identifier)) {
+            $username = ucfirst($user->name);
+            session()->flash('message', '<span class="text-black">Helló '.$username.'! Here you can enter your new password for logging in.</span>');
+            return view('backend.admin_newpass');
+        } else {
+            session()->flash('message', '<span class="text-danger">An error occurred!</span>');
+            return redirect()->route('admin_login');
+        }
+    }
+
     public function admin_newpass_post(Request $request)
     {
         dd($request);

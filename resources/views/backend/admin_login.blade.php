@@ -25,14 +25,15 @@
                 <div class="message text-center p-3">
                     @if(session('message'))
                         <h6 class="p-0 m-0">{!! session('message') !!}</h6>
+                        @php Session::forget('message'); @endphp
                     @endif
                 </div>
                 <form method="POST" action="{{route('admin_login_post')}}">
                     @csrf
                     <label class="mt-3">Username or email</label>
-                    <input type="text" name="usernameoremail" value="miklosdani@gmail.com" class="form-control mt-2" minlength="8" maxlength="255" required>
+                    <input type="text" name="usernameoremail" value="miklosdani@gmail.com" class="form-control mt-2" minlength="8" maxlength="255" autocomplete="off" required>
                     <label class="mt-3">Password</label>
-                    <input type="password" name="password" value="12345678" class="form-control mt-2" minlength="8" maxlength="255" required>
+                    <input type="password" name="password" value="12345678" class="form-control mt-2" minlength="8" maxlength="255" autocomplete="off" required>
                     <div class="login-distance">
                         <label class="me-2">I stay logged in</label>
                         <input type="checkbox" name="stay" class="form-check-input align-middle p-0 m-0">
@@ -49,7 +50,7 @@
                     <div class="row p-0 m-0">
                         <span>Please enter the email address you registered with.</span>
                         <div class="col-9 p-0 m-0">
-                            <input type="email" name="email" value="miklosdani@gmail.com" class="form-control form-control-sm width-95 pe-2" required>
+                            <input type="email" name="email" value="miklosdani@gmail.com" class="form-control form-control-sm width-95 pe-2" autocomplete="off" required>
                         </div>
                         <div class="col-3 p-0 m-0">
                             <button type="submit" class="btn btn-sm btn-primary text-uppercase text-white w-100">Send</button>
