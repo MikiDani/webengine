@@ -19,6 +19,7 @@
 	@yield('content')
     <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/modules/jquery/dist/jquery.min.js"></script>
+	<script src="/modules/jquery-validation/dist/jquery.validate.js"></script>
     @yield('page_js')
     <script>
 	    window.jQuery.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});

@@ -11569,6 +11569,11 @@ textarea.form-control-lg {
   font-style: italic;
 }
 
+.number-width {
+  max-width: 6rem !important;
+  text-align: center;
+}
+
 .backend-menu-text > ul {
   align-items: center;
   text-align: center;
@@ -11616,6 +11621,17 @@ textarea.form-control-lg {
 
 .admin-menu-logo {
   width: 3rem;
+}
+
+input + label.error {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: #5cf45c;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
 }
 
 .full-win {

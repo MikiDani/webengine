@@ -18,18 +18,21 @@ class ForgotEmail extends Mailable
 
     public $email;
 	public $user;
+	public $linkroute;
 	public $activate_url = null;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($email)
+    public function __construct($email, $type)
     {
         $this->email = $email;
+        
+        $this->linkroute = ($type == 'admin') ? 'admin_newpass' : 'start';
 
         $this->user = User::where('email', $this->email)->first();
 
-        $this->activate_url = URL::temporarySignedRoute('admin_newpass', now()->addMinutes(120), ['id' => $this->user->id, 'identifier' => Hash::make($this->user->identifier)]);
+        $this->activate_url = URL::temporarySignedRoute($this->linkroute, now()->addMinutes(10), ['id' => $this->user->id, 'identifier' => Hash::make($this->user->identifier)]);
     }
     /**
      * Get the message content definition.
@@ -39,16 +42,6 @@ class ForgotEmail extends Mailable
         return new Content(
             view: 'emails.forgotemail',
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 
     /**

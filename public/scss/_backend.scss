@@ -25,7 +25,7 @@
             text-decoration-thickness: 3px;
             text-decoration-color: $color-underline-primary !important;
             -moz-text-decoration-color: $color-underline-primary !important;
-}
+        }
     }
 }
 
@@ -50,4 +50,16 @@
 
 .admin-menu-logo {
     width: 3rem;
+}
+
+// jquery error messages
+input + label.error {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background-color: $secondary;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
 }

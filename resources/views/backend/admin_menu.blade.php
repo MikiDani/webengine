@@ -21,6 +21,12 @@
 				<li class="nav-item">
 					<a href="{{ route('admin_logout')}}">Logout</a>
 				</li>
+				@if (Auth::check())
+					<li>
+						<span class="ms-5">{{ Auth::user()->name }}</span>
+					</li>
+				@endif
+				</li>
 			</ul>
 		</div>
 	</div>
