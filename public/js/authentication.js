@@ -1,17 +1,35 @@
-import { OpenCloseDiv } from './scripts.js'
+import { OpenCloseDiv, OpenCloseDivPassword, DomCheckModify } from './scripts.js'
+
+var speed = 400
 
 $(document).ready(function() {
     const openCloseDivLogin = new OpenCloseDiv({ 
         buttonDiv: 'forgot-button',
         actionDiv: 'forgot-action',
-        speed: 200,
+        speed: speed,
         startState: false
     })
 
     const openCloseDivRobotButton = new OpenCloseDiv({ 
         buttonDiv: 'robot-button',
         actionDiv: 'robot-action',
-        speed: 200,
+        speed: speed,
+        startState: false
+    })
+
+    const openCloseDivCurrentButton = new OpenCloseDivPassword({ 
+        buttonDiv: 'change-button',
+        actionDiv: 'change-action',
+        speed: speed,
+        startState: false,
+        newpasswordId: 'newpassword',
+        newpasswordagainId: 'newpasswordagain'
+    })
+
+    const openCloseUnsubscribe = new OpenCloseDiv({ 
+        buttonDiv: 'unsubscribe-button',
+        actionDiv: 'unsubscribe-action',
+        speed: speed,
         startState: false
     })
 
@@ -81,6 +99,55 @@ $(document).ready(function() {
             }
         });
     }
+
+    // PROFILE VALIDATE
+    if ($('#profile-form').length) {
+        $('#profile-form').validate({
+            rules: {
+                    name: {
+                    minlength: 8,
+                    maxlength: 255
+                },
+                currentpassword: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 255
+                },
+                newpassword: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 255,
+                },
+                newpasswordagain: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 255,
+                    equalTo: "#newpassword"
+                }
+            }
+        });
+    }
+
+    // UNSUBSCRIBE VALIDATE
+    if ($('#unsubscribe-form').length) {
+        $('#unsubscribe-form').validate({
+            rules: {
+                currentpassword: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 255
+                },
+                confirm: {
+                    required: true,
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo("#checkbox-messages");
+            },
+        });
+    }
+
+    //observer.disconnect();
 
     // VALIDATE MESSAGES
     jQuery.extend(jQuery.validator.messages, {

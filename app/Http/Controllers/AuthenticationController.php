@@ -17,7 +17,8 @@ class AuthenticationController extends Controller
 {
     // STATIC
 
-    private static function login_authentication($request) {
+    private static function login_authentication($request)
+    {
         if (empty($request['password']))
         {
             return [
@@ -68,7 +69,8 @@ class AuthenticationController extends Controller
         ];
     }
 
-    private static function registration_authentication($request, $type) {
+    private static function registration_authentication($request, $type)
+    {
         
         $allready = true;
         $message = "";
@@ -137,7 +139,8 @@ class AuthenticationController extends Controller
         }
     }
 
-    private static function modify_autentichation($request) {
+    private static function modify_autentichation($request)
+    {
         $user = auth()->user();
         $requestData = $request->only(['name', 'email', 'rank']);
 
@@ -146,9 +149,9 @@ class AuthenticationController extends Controller
 
         if (!empty($request['name']))
         {
-            if (strlen($request['name']) < 5) {
+            if (strlen($request['name']) < 8) {
                 $allReady = false;
-                $message .= 'Username must be at least 5 characters long. ';
+                $message .= 'Username must be at least 8 characters long. ';
             } 
             else if (User::where('name', $request['name'])->count() && 
             User::where('name', $request['name'])->first()->name !== $user->name)
@@ -158,28 +161,39 @@ class AuthenticationController extends Controller
             }
         }
 
-        if (User::where('email', $request['email'])->count() && 
-            User::where('email', $request['email'])->first()->email !== $user->email)
+        if (!empty($request['email']))
         {
-            $allReady = false;
-            $message .= 'The email is already in use. ';
-        } 
-        else
-        {
-            if (isset($request['email']) && !filter_var($request['email'], FILTER_VALIDATE_EMAIL))
+            if (User::where('email', $request['email'])->count() && 
+                User::where('email', $request['email'])->first()->email !== $user->email)
             {
                 $allReady = false;
-                $message .= 'Invalid email format. ';
+                $message .= 'The email is already in use. ';
+            } 
+            else
+            {
+                if (isset($request['email']) && !filter_var($request['email'], FILTER_VALIDATE_EMAIL))
+                {
+                    $allReady = false;
+                    $message .= 'Invalid email format. ';
+                }
             }
         }
-        
+
+        if (!empty($request['rank']) && ($request['rank'] == 0 || $request['rank'] == 1))
+        {
+            $user->rank = $request['rank'];
+            $user->save();
+        }
+
         if ($allReady)
         {
-            if (isset($request['new_password']))
+            if (isset($request['newpassword']))
             {
-                if (strlen($request['new_password']) >= 8) {
-                    $user->password = Hash::make($request['new_password']);
+                if (strlen($request['newpassword']) >= 8) {
+                    
+                    $user->password = Hash::make($request['newpassword']);
                     $user->save();
+
                 } else {
                     return [
                         'statuscode' => 400,
@@ -193,7 +207,7 @@ class AuthenticationController extends Controller
             }
     
             return [
-                'statuscode' => 201,
+                'statuscode' => 200,
                 'message' => 'User has been updated.'
             ];
         }
@@ -291,6 +305,31 @@ class AuthenticationController extends Controller
             return [
                 'statuscode' => '400',
                 'message' => $message
+            ];
+        }
+    }
+
+    private static function resubscribe($response)
+    {
+        $user = User::where('email', $response['email'])->where('identifier', $response['identifier'])->first();
+        
+        if (Hash::check($response['password'], $user->password)) {
+            if ($user) {
+                $user->delete();
+                return [
+                    'statuscode' => '200',
+                    'message' => 'User deleted successfully.'
+                ];
+            } else {
+                return [
+                    'statuscode' => '400',
+                    'message' => 'Error in identification.'
+                ];
+            }
+        } else {
+            return [
+                'statuscode' => '400',
+                'message' => 'Error in identification.'
             ];
         }
     }
@@ -399,6 +438,18 @@ class AuthenticationController extends Controller
         return response()->json([$return_response['messages']], $return_response['statuscode']);
     }
 
+    public function api_unsubscribe(Request $request)
+    {
+        $request['email'] = $request->email;
+        $request['identifier'] = $request->identifier;
+        $request['password'] = $request->password;
+
+        $response = self::resubscribe($request);
+        $return_response = self::request_maker($response);
+
+        return response()->json([$return_response['messages']], $return_response['statuscode']);
+    }
+
     public function api_confirmation(Request $request)
     {
         $response = self::confirmation_func($request);
@@ -409,11 +460,19 @@ class AuthenticationController extends Controller
 
     public function api_forgotemail(Request $request)
     {
-
         $response = self::forgotemail_func($request, 'api');
         $return_response = self::request_maker($response);
 
         return response()->json([$return_response['messages']], $return_response['statuscode']);
+    }
+
+    public function api_error()
+    {
+        $return_respone = [];
+        $return_respone['messages']['message'] = 'error';
+        $return_respone['statuscode'] = 400;
+$return_respone['']['code'] = 0;
+        return response()->json([$return_respone['messages']], $return_respone['statuscode']);
     }
  
     // WEB
@@ -452,8 +511,8 @@ class AuthenticationController extends Controller
             $email_verified = $email_check->email_verified_at;
             $userid = $email_check->id;
         } else if ($name_check && Hash::check($request->password, $name_check->password)) {
-            $email_verified = $email_check->email_verified_at;
-            $userid = $email_check->id;
+            $email_verified = $name_check->email_verified_at;
+            $userid = $name_check->id;
         } else 
         {
             session()->flash('message', '<span class="text-danger">Incorrect login!</span>');
@@ -541,12 +600,75 @@ class AuthenticationController extends Controller
         }
     }
 
+    public function admin_modify_post(Request $request)
+    {
+        if (Hash::check($request->currentpassword, Auth::user()->password))
+        {
+            if (isset($request->newpassword))
+            {
+                if (!(isset($request->newpasswordagain) && $request->newpassword == $request->newpasswordagain))
+                {
+                    session()->flash('message', '<span class="text-danger">Incorrect data! nem eggyeznek a jelszavak</span>');
+                    return redirect()->route('admin_user')->withInput();
+                }
+            }
+
+            $admin_response = self::modify_autentichation($request);
+
+            if ($admin_response['statuscode'] == 200 || $admin_response['statuscode'] == 201)
+            {
+                session()->flash('message', '<span class="text-success">'.$admin_response['message'].'</span>');
+                return redirect()->route('admin_user');
+            }
+            else
+            {
+                session()->flash('message', '<span class="text-danger">'.$admin_response['message'].'</span>');
+                return redirect()->route('admin_user');
+            }
+        }
+        else
+        {
+            session()->flash('message', '<span class="text-danger">Invalid password!</span>');
+            return redirect()->route('admin_user')->withInput();    
+        }
+    }
+
     public function admin_logout()
     {
         Auth::logout();
         Cache::forget('webuser');
         session()->flash('message', 'You have logged out of your account!');
         return redirect()->route('admin_login');
+    }
+
+    public function admin_unsubscribe(Request $request)
+    {
+        if (isset($request->confirm) && $request->confirm == 'on') {
+            $user = Auth::user();
+            $currentpassword = $request->currentpassword;
+            $request = null;
+            $request['email'] = $user->email;
+            $request['identifier'] = $user->identifier;
+            $request['password'] = $currentpassword;
+            $admin_response = self::resubscribe($request);
+
+            if ($admin_response['statuscode'] == 200 || $admin_response['statuscode'] == 201)
+            {
+                session()->flash('message', '<span class="text-success">'.$admin_response['message'].'</span>');
+                Auth::logout();
+                Cache::forget('webuser');
+                return redirect()->route('admin_login');
+            }
+            else
+            {
+                session()->flash('message', '<span class="text-danger">'.$admin_response['message'].'</span>');
+                return back();
+            }
+
+        } else {
+            session()->flash('message', '<span class="text-danger">Confirm checkbox not selected.</span>');
+            return redirect()->route('admin_user');
+        }
     }
     
     public function admin_forgotemail_post(Request $request)
@@ -584,8 +706,6 @@ class AuthenticationController extends Controller
     {
         $getuserid = $request->id;
         $user = User::find($getuserid);
-
-        $request->kisfasz = $user;
     
         if ($user) {
             $hashed_identifier = $request->identifier;

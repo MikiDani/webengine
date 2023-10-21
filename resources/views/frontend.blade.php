@@ -18,26 +18,23 @@
 <body class="bg-light">
     @if (Auth::check()) 
         <div class="bg-dark p-3 text-center border-bottom border-info mb-3">
-            <a href="{{route('admin_index')}}" class="btn btn-primary">admin_INDEX</a>
+            <a href="{{route('admin_index')}}" class="btn btn-primary">ADMIN</a>
         </div>
     @else
         <div class="bg-dark p-3 text-center border-bottom border-info mb-3">
-            <a href="{{route('admin_login')}}" class="btn btn-primary">admin_login</a>
+            <a href="{{route('admin_login')}}" class="btn btn-primary">Login</a>
         </div>
     @endif
-	<div id="root" class="container p-0 m-0 mx-auto">
-        <div class="bg-warning p-3">
-
-            <div class="p-3 bg-info text-center">
-                @if(session('message'))
-                    <h6 class="p-0 m-0">{!! session('message') !!}</h6>
-                    @php session()->forget('message'); @endphp
-                @endif
-                <br>
-                @if (Auth::check())
-                    HELLÓ {{ Auth::user()->name }} !!!
-                @endif
-            </div>
+	<div id="root" class="container-fluid p-0 m-0 mx-auto">
+        <div class="row p-0 m-0">
+            @if (Auth::check())
+                <h6 class="p-0 m-0 text-center">Hi {{ Auth::user()->name }}!</h6>
+            @endif
+            <br>
+            @if(session('message'))
+                <h6 class="p-0 m-0 text-center">{!! session('message') !!}</h6>
+                @php session()->forget('message'); @endphp
+            @endif
         </div>
 	</div>
     <script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

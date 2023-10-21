@@ -1,7 +1,7 @@
 @extends('backend_default')
 
 @section('page_js')
-<script type="module" src="/js/authentication.js"></script>
+    <script type="module" src="/js/authentication.js"></script>
 @endsection
 
 @section('content')
@@ -11,15 +11,17 @@
                 <div class="login-box-head">
                     <hr>
                         <div class="d-flex justify-content-center align-items-center">
-                            <h3 class="text-uppercase align-middle p-0 m-0 mx-3">
-                                <img src="/img/favicons/apple-touch-icon.png" alt="logo" class="admin-login-logo">
-                                WebEngine
-                            </h3>
+                            <a href="{{route('start')}}" class="link-clean">
+                                <h3 class="text-uppercase align-middle p-0 m-0 mx-3">
+                                    <img src="/img/favicons/logo_anim.gif" alt="logo" class="admin-login-logo">
+                                    WebEngine
+                                </h3>
+                            </a>
                             <div class="icon-bg icon-bg-3">
                                 <i class="bi bi-box-arrow-in-right align-middle icon-size-3 text-white"></i>
                             </div>
                         </div>
-                    <hr><h4 class="text-center">New Password</h4><hr>
+                    <hr><h4 class="text-center">Login</h4><hr>
                 </div>
                 <div class="message text-center p-3">
                     @if(session('message'))
@@ -37,9 +39,14 @@
                         <label class="mt-3">Password</label>
                         <input type="password" name="password" class="form-control mt-2">
                     </p>
-                    <div class="login-distance">
-                        <label class="me-2">I stay logged in</label>
-                        <input type="checkbox" name="stay" class="form-check-input align-middle p-0 m-0">
+                    <div class="row p-0 m-0 login-distance">
+                        <div class="col-6 text-center">
+                            <label class="me-1">I stay logged in</label>
+                            <input type="checkbox" name="stay" class="form-check-input align-middle p-0 m-0">
+                        </div>
+                        <div class="col-6 text-center">
+                            <a href="{{route('admin_registration')}}">I would like to register</a>
+                        </div>
                     </div>
                     <div class="row p-0 m-0">
                         <button type="submit" class="btn btn-lg bg-primary text-uppercase text-white">Login</button>
@@ -51,7 +58,7 @@
                 <form class="forgot-action" style="display:none;" method="POST" action="{{route('admin_forgotemail_post')}}">
                     @csrf
                     <div class="row p-0 m-0">
-                        <span>Please enter the email address you registered with.</span>
+                        <span class="p-0 m-0 mb-2">Please enter the email address you registered with.</span>
                         <div class="col-9 p-0 m-0">
                             <input type="email" name="email" class="form-control form-control-sm width-95 pe-2" autocomplete="off" required>
                         </div>

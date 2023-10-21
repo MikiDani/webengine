@@ -1,3 +1,7 @@
+body {
+    background-image: url('/img/bgpuzzle1.png');
+}
+
 // BACKEND MENU
 
 .backend-menu-text > ul {
@@ -31,14 +35,15 @@
 
 .custom-toggler {
     border: none;
-    padding: 0.2rem;
+    padding: 0.5rem;
     background-color: $color-gold-01;
-    border-radius: 0;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    -ms-border-radius: 0;
-    -o-border-radius: 0;
-    &:focus {
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    &:focus
+    {
         box-shadow: none;
         outline: none;
     }
@@ -46,6 +51,8 @@
 
 .admin-login-logo {
     width: 4rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .admin-menu-logo {
@@ -62,4 +69,9 @@ input + label.error {
     -moz-border-radius: 0.5rem;
     -ms-border-radius: 0.5rem;
     -o-border-radius: 0.5rem;
+}
+
+.error-style {
+    text-align: center;
+    color: red;
 }

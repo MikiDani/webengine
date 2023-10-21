@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container justify-content-center text-center">
-		<a class="navbar-brand" href="{{ route('start') }}"><img src="/img/favicons/apple-touch-icon.png" alt="logo" class="admin-menu-logo"> WebEngine</a>
+		<a class="navbar-brand" href="{{ route('start') }}"><img src="/img/favicons/logo_anim.gif" alt="logo" class="admin-menu-logo"> WebEngine</a>
 		<button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 		</button>
@@ -23,10 +23,9 @@
 				</li>
 				@if (Auth::check())
 					<li>
-						<span class="ms-5">{{ Auth::user()->name }}</span>
+						<span class="mx-3">{{ Auth::user()->name }}</span>
 					</li>
 				@endif
-				</li>
 			</ul>
 		</div>
 	</div>
