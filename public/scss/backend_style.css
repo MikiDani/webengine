@@ -11581,6 +11581,11 @@ textarea.form-control-lg {
 
 body {
   background-image: url("/img/bgpuzzle1.png");
+  background-color: white !important;
+}
+
+.login-box {
+  box-shadow: 10px 10px 12px rgba(0, 0, 0, 0.4666666667);
 }
 
 .backend-menu-text > ul {
@@ -11648,6 +11653,10 @@ input + label.error {
 .error-style {
   text-align: center;
   color: red;
+}
+
+#selectlang {
+  min-width: 4rem;
 }
 
 .full-win {

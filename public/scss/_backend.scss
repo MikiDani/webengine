@@ -1,5 +1,10 @@
 body {
     background-image: url('/img/bgpuzzle1.png');
+    background-color: white !important;
+}
+
+.login-box {
+    box-shadow: 10px 10px 12px #0007;
 }
 
 // BACKEND MENU
@@ -74,4 +79,8 @@ input + label.error {
 .error-style {
     text-align: center;
     color: red;
+}
+
+#selectlang {
+    min-width: 4rem;
 }

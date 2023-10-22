@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
 use App\Models\User;
 
 
@@ -20,35 +21,38 @@ class ConfirmEmail extends Mailable
 	public $user;
 	public $activate_url = null;
 
-    public function __construct($email, $type)
-    {
-        $this->email = $email;
+	public function __construct($email, $type)
+	{
+		$this->email = $email;
 
-        //$this->linkroute = ($type == 'admin') ? 'admin_confirmation' : 'api_confirmation'; !!!
-        $this->linkroute = ($type == 'admin') ? 'admin_confirmation' : 'admin_confirmation';
+		//$this->linkroute = ($type == 'admin') ? 'admin_confirmation' : 'api_confirmation'; !!!
+		$this->linkroute = ($type == 'admin') ? 'admin_confirmation' : 'admin_confirmation';
 
-        $this->user = User::where('email', $this->email)->first();
+		$this->user = User::where('email', $this->email)->first();
 
-        $this->activate_url = URL::temporarySignedRoute($this->linkroute, now()->addMinutes(10), ['id' => $this->user->id, 'identifier' => Hash::make($this->user->identifier)]);
-    }
+		$this->activate_url = URL::temporarySignedRoute($this->linkroute, now()->addMinutes(10), ['id' => $this->user->id, 'identifier' => Hash::make($this->user->identifier)]);
+	}
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'emails.confirmemail',
-        );
-    }
+	/**
+	 * Get the message content definition.
+	 */
+	public function content(): Content
+	{
+		return new Content(
+			view: 'emails.confirmemail',
+		);
+	}
 
-    public function build()
-    {
-        $username = ucfirst($this->user->name);
-        return $this->subject('Confirmation of your e-mail address')->view('emails.confirmemail')
-        ->with([
-            'username' => $username,
-            'activate_url' => $this->activate_url
-        ]);
-    }
+	public function build()
+	{
+		$username = ucfirst($this->user->name);
+
+		$emailSubject = Lang::get('messages.confirm.textlabel');
+
+		return $this->subject($emailSubject)->view('emails.confirmemail')
+		->with([
+			'username' => $username,
+			'activate_url' => $this->activate_url
+		]);
+	}
 }
