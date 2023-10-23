@@ -25,6 +25,7 @@
 			<a href="{{route('admin_login')}}" class="btn btn-primary">Login</a>
 		</div>
 	@endif
+
 	<div id="root" class="container-fluid p-0 m-0 mx-auto">
 		<div class="row p-0 m-0">
 			@if(session('message'))
@@ -32,9 +33,16 @@
 				@php session()->forget('message'); @endphp
 			@endif
 		</div>
+		<div id="app-container"></div>	{{-- REACT --}}
 	</div>
+	
 	<script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/modules/jquery/dist/jquery.min.js"></script>
+
+	<script src="/modules/react/react.development.js"></script>
+	<script src="/modules/react/react-dom.development.js"></script>
+	<script src="/js/app.js"></script>
+
 	<script src="/js/admin.js"></script>
 	<script>
 		window.jQuery.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
