@@ -53,9 +53,9 @@
 							<label>{{ __('messages.userprofile.textnewpass') }}</label>
 							<input type="password" id="newpassword" name="newpassword" class="form-control mt-2" disabled>
 						</p>
-						<p class="p-0 m-0">
+						<p class="p-0 m-0 mt-3">
 							<label>{{ __('messages.userprofile.textnewpassagain') }}</label>
-							<input type="password" id="newpasswordagain" name="newpasswordagain" class="form-control" disabled>
+							<input type="password" id="newpasswordagain" name="newpasswordagain" class="form-control mt-2" disabled>
 						</p>
 					</div>
 					{{-- submit --}}

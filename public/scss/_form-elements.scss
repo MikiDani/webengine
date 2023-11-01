@@ -1,30 +1,30 @@
 .link-1 {
-    cursor: pointer;
-    &:hover {
-        & > span {
-            text-decoration: underline;
-            text-underline-offset: 0.5rem;
-            text-decoration-thickness: 2px;
-            text-decoration-color: $color-underline-primary !important;
-            -moz-text-decoration-color: $color-underline-primary !important;
-            font-weight: bold;
+	cursor: pointer;
+	&:hover {
+		& > span {
+			text-decoration: underline;
+			text-underline-offset: 0.5rem;
+			text-decoration-thickness: 2px;
+			text-decoration-color: $color-underline-primary !important;
+			-moz-text-decoration-color: $color-underline-primary !important;
+			font-weight: bold;
 }
-        & > span > i {
-            color:$primary;
-            font-size: 1.5rem;
-        }
-    }
+		& > span > i {
+			color:$primary;
+			font-size: 1.5rem;
+		}
+	}
 }
 
 .link1 > span > i:hover {
-    color: $primary;
+	color: $primary;
 }
 
 .login-distance {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 5rem;
 }
 
 .width-95 { width: 95%; }
@@ -37,15 +37,115 @@
 .width-20 { width: 20%; }
 
 .text-italic {
-    font-style: italic;
+	font-style: italic;
 }
 
 .number-width {
-    max-width: 6rem !important;
-    text-align: center;
+	max-width: 6rem !important;
+	text-align: center;
 }
 
 .link-clean {
-    text-decoration: none !important;
-    color: black !important;
+	text-decoration: none !important;
+	color: black !important;
+}
+
+.menu-list-line-height {
+	//display: inline-block;
+	//line-height: 2.5rem !important;
+	list-style-type: none;
+}
+
+.menu-list-line-min-width {
+	display: inline-block;
+	justify-content: center;
+	align-items: center;
+	min-width: 12rem !important;
+	height: 2.7rem;
+}
+
+$secondary: #007bff;
+
+.form-menuname {
+	width: 60%;
+	padding: 0.15rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	border: none;
+	border-radius: 0.5rem;
+	-webkit-border-radius: 0.5rem;
+	-moz-border-radius: 0.5rem;
+	-ms-border-radius: 0.5rem;
+	-o-border-radius: 0.5rem;
+	
+	&:focus {
+		outline: none;
+		border: none;
+	}
+	
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.text-bold {
+	font-weight: bold !important;
+}
+
+// menu list session
+
+.mt-05 {
+	margin-top: 0.15rem;
+}
+
+.bi-arrows-move {
+	&:hover {
+		cursor: grab;
+		color: $warning;
+	}
+	&:active {
+		cursor: grabbing;
+	}
+}
+
+.bi-plus-circle {
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.plus-button {
+	width: 16px;
+	height: 16px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='black' class='bi bi-plus-circle' viewBox='0 0 16 16'%3E%3Cpath d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'%3E%3C/path%3E%3Cpath d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z'%3E%3C/path%3E%3C/svg%3E");
+	&:hover {
+		color: $warning;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='gold' class='bi bi-plus-circle-fill' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z'%3E%3C/path%3E%3C/svg%3E");
+	}
+	cursor: pointer;
+}
+
+.minus-button {
+	width: 16px;
+	height: 16px;
+	color: $danger;
+
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-x-square' viewBox='0 0 16 16'%3E%3Cpath d='M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z'%3E%3C/path%3E%3Cpath d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z'%3E%3C/path%3E%3C/svg%3E");
+	&:hover {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='red' class='bi bi-x-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z'%3E%3C/path%3E%3C/svg%3E");
+	}
+	cursor: pointer;
+}
+
+.select-button {
+	width: 16px;
+	height: 16px;
+	color: $info;
+
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='gold' class='bi bi-check2-circle' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'%3E%3C/path%3E%3Cpath d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'%3E%3C/path%3E%3C/svg%3E");
+	&:hover {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='green' class='bi bi-check2-circle' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'%3E%3C/path%3E%3Cpath d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'%3E%3C/path%3E%3C/svg%3E");
+
+	}
+	cursor: pointer;
 }

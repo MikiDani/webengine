@@ -121,7 +121,7 @@ return [
 	'adminmenu' => [
 		'textfrontend' => 'Frontend page',
 		'textindex' => 'Index', 
-		'textpagemenus' => 'Page Menus', 
+		'textpagemenus' => 'Page Menus list', 
 		'textuseroptions' => 'User Options', 
 		'textlogout' => 'Logout', 
 	],

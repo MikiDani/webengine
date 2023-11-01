@@ -2,26 +2,30 @@
 
 In this login engine, I use the basic "Auth" part for identification, and the "laravel passport" add-on is also installed in the api part.
 
+#### USE:
+
+php artisan erve (SERVER), npm run watch(REACT JSX converter)
+
 #### API:
-| NAME         | METHOD | AUTH |               URL                        | JSON INPUTS |
-| :-----------:|:------:|:----:|:----------------------------------------:|:-----------:|
-| USER         | GET    |      | http://localhost:8000/api/user           | - |
-| LOGIN        | POST   |  *   | http://localhost:8000/api/login          | usernameoremail, password |
-| LOGOUT       | POST   |  *   | http://localhost:8000/api/logout         | - |
-| REGISTER     | POST   |      | http://localhost:8000/api/login          | name, email, rank, password |
-| UNSUBSCRIBE  | POST   |  *   | http://localhost:8000/api/unsubscribe    | email, identifier |
-| FORGOTEMAIL  | POST   |      | http://localhost:8000/api/forgotemail    | email |
-| CONFORMATION | GET    |      | http://localhost:8000/api/confirmation?  | ?id, ?identifier |
-| MODIFY       | PATCH  |  *   | http://localhost:8000/api/modify         | password, new_password, name, email, rank |
+| NAME         | METHOD | AUTH |      URL              | JSON INPUTS |
+| :-----------:|:------:|:----:|:---------------------:|:-----------:|
+| USER         | GET    |      | /api/user             | - |
+| LOGIN        | POST   |  *   | /api/login            | usernameoremail, password |
+| LOGOUT       | POST   |  *   | /api/logout           | - |
+| REGISTER     | POST   |      | /api/register         | name, email, rank, password |
+| UNSUBSCRIBE  | POST   |  *   | /api/unsubscribe      | email, identifier |
+| FORGOTEMAIL  | POST   |      | /api/forgotemail      | email |
+| CONFORMATION | GET    |      | /api/confirmation?    | ?id, ?identifier |
+| MODIFY       | PATCH  |  *   | /api/modify           | password, new_password, name, email, rank |
 
 #### WEB:
-| NAME         | METHOD | AUTH |               URL                        | JSON INPUTS |
+| NAME         | METHOD | AUTH |      URL              | JSON INPUTS |
 | :-----------:|:------:|:----:|:----------------------------------------:|:-----------:|
-| LOGIN        | POST   |  *   | http://localhost:8000/admin/login          | usernameoremail, password |
-| LOGOUT       | POST   |  *   | http://localhost:8000/admin/logout         | - |
-| REGISTER     | POST   |      | http://localhost:8000/admin/registration   | name, email, rank, password |
-| UNSUBSCRIBE  | POST   |  *   | http://localhost:8000/admin/unsubscribe    | email, identifier |
-| FORGOTEMAIL  | POST   |      | http://localhost:8000/admin/forgotemail    | email |
-| CONFORMATION | GET    |      | http://localhost:8000/admin/confirmation?  | ?id, ?identifier |
-| MODIFY       | PATCH  |  *   | http://localhost:8000/admin/modify         | password, new_password, name, email, rank |
-| NEWPASS      | POST   |      | http://localhost:8000/admin/newpass        | password, new_password |
+| LOGIN        | POST   |  *   | /admin/login          | usernameoremail, password |
+| LOGOUT       | POST   |  *   | /admin/logout         | - |
+| REGISTER     | POST   |      | /admin/registration   | name, email, rank, password |
+| UNSUBSCRIBE  | POST   |  *   | /admin/unsubscribe    | email, identifier |
+| FORGOTEMAIL  | POST   |      | /admin/forgotemail    | email |
+| CONFORMATION | GET    |      | /admin/confirmation?  | ?id, ?identifier |
+| MODIFY       | PATCH  |  *   | /admin/modify         | password, new_password, name, email, rank |
+| NEWPASS      | POST   |      | /admin/newpass        | password, new_password |

@@ -1,10 +1,11 @@
 import { OpenCloseDiv, OpenCloseDivPassword, DomCheckModify } from './scripts.js'
 
-console.log(lang)
+//console.log(lang)
 
 var speed = 200
 
 $(document).ready(function() {
+	// AUTENTICATION login, register, profil
 	const openCloseDivLogin = new OpenCloseDivPassword({ 
 		buttonDiv: 'forgot-button',
 		actionDiv: 'forgot-action',
@@ -211,4 +212,204 @@ $(document).ready(function() {
 			min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
 		});
 	}
+	// MENU ELEMENT CREATOR ALL
+	if ($('#menu-box').length) {
+
+		var menuSpeed = 20
+
+		// ELEMENT CREATOR
+		var createNewElement = function (newId, ulCountNumber) {
+			let newElement = `
+			<li id="${newId}" data-id="${newId}" class="menu-sortable menu-sortable_${ulCountNumber} menu-list-line-height">
+				<div class="menu-list-line-min-width bg-secondary p-2 m-1 text-center rounded">
+					<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
+					<i id="plus_${newId}" class="plus-button d-inline-block align-middle me-1"></i>
+					<i id="delete_${newId}" class="minus-button d-inline-block align-middle me-1"></i>
+					<input type="text" name="menuname" value="New element ${newId}" class="form-menuname d-inline-block align-middle">
+					<i id="select_${newId}" class="select-button d-inline-block align-middle"></i>
+					<i id="openclose_${newId}" class="bi bi-filter mt-05 float-end d-inline-block align-middle"></i>
+				</div>
+			</li>`;
+			return newElement;
+		}
+		
+		// ARANGEMENT MENU ELEMENTS
+		var arrangementMenuElements = function () {
+			$("ul[class^='menu-menurow_']").each(function() {
+				let count = $(this).attr('data-count')
+				$(this).sortable({
+					connectWith: `.menu-sortable_${count}`
+				}).disableSelection();
+			});
+		}
+		arrangementMenuElements()	// first load
+
+		// ADD EVENTLISTENERS
+		var newAddEventlisteners = function(newId) {
+			$("#menu-box").find(`i[id^='plus_${newId}']`).off()
+			$("#menu-box").find(`i[id^='plus_${newId}']`).on('click', function() {
+				let clone = $(this)
+				plusButtonsclickEvent(clone)
+			});
+			$("#menu-box").find(`i[id^='openclose_${newId}']`).on('click', function() {
+				let clone = $(this)
+				openCloseAction(clone)
+			});
+			$("#menu-box").find(`i[id^='delete_${newId}']`).on('click', function() {
+				let clone = $(this)
+				deleteAction(clone)
+			});
+			arrangementMenuElements()
+		}
+		
+		// OPEN / CLOSE
+		var openCloseAction = function(clone) {
+			var iconElement = clone
+			let childUl = clone.closest('.menu-sortable').find('ul')
+
+			if(childUl.length > 0) {
+				childUl.children('li').each(function() {
+					if ($(this).css('display') == 'none') {
+						$(this).show(menuSpeed)
+						iconElement.removeClass('bi-caret-right-fill')
+						iconElement.addClass('bi-caret-down')
+					} else {
+						iconElement.removeClass('bi-caret-down')
+						iconElement.addClass('bi-caret-right-fill')
+						$(this).hide(menuSpeed)
+					}
+				});
+			}
+		}
+		$("#menu-box").find("i[id^='openclose_']").on('click', function() {
+			let clone = $(this)
+			openCloseAction(clone)
+		});
+
+		// SELECT
+		$("#menu-box").find("i[id^='select_']").on('click', function() {
+			console.log('CLICK!!!')
+			var iconElement = $(this)
+			let thisLi = iconElement.closest('.menu-sortable');
+			let thisId = thisLi.attr('data-id');
+			$("#menu-element-label").text('This menu element ID: ' + thisId)
+		});
+
+		// DELETE
+		var deleteAction = function(clone) {
+			let liELement = clone.closest('.menu-sortable')
+			var childUl = clone.closest('.menu-sortable').find('ul')
+
+			if(!(childUl.length > 0)) {
+				if (liELement.siblings().length == 0) {
+					// Last li element. Delete environment and parent element openclose icon reset standard position
+					let parentElementOpenCloseIcon = liELement.parent().closest('.menu-sortable').find("i[id^='openclose_']")
+					parentElementOpenCloseIcon.removeClass('bi-caret-down bi-caret-right-fill bi-filter')
+					parentElementOpenCloseIcon.addClass(' bi-filter')
+
+					liELement.parent().remove();
+				} else {
+					// Not last li element. Only delete.
+					liELement.remove()
+				}
+			} else {
+				console.log('Van GYERMEK');
+				childUl.css('border-radius', '0.5rem');
+				childUl.css('background-color', 'gold');
+			
+				var intervalId = setInterval(function () {
+					childUl.css('background-color', 'white');
+					clearInterval(intervalId);
+				}, 1000);
+			}
+		}
+		$("#menu-box").find("i[id^='delete_']").on('click', function() {
+			let clone = $(this)
+			deleteAction(clone)
+		});
+
+		// PLUS BUTTON
+		var plusButtonsclickEvent = function(clone) {
+			let newId = ($("#menu-box").find('li').length > 0) ? $("#menu-box").find('li').length + 1 : 1;
+			
+			console.log('NEW ID:');
+			console.log(newId);
+
+			let parentLi = clone.closest('.menu-sortable')
+	
+			if (parentLi.children('ul').length > 0) {
+				// have children UL
+				let childUl = parentLi.children('ul')
+				let ulCountNumber = childUl.first().attr('data-count')
+				let newElement = createNewElement(newId, ulCountNumber)
+				
+				childUl.prepend(newElement)
+			} else {
+				// no have children UL Now create.
+				parentLi.find("div i[id^='openclose_']").removeClass('bi-caret-down bi-caret-right-fill bi-filter')
+				parentLi.find("div i[id^='openclose_']").addClass('bi-caret-down')
+
+				let newUlCountNumber = $("#menu-box").find('ul').length + 1
+				let newUlElement = $(`<ul data-count="${newUlCountNumber}" class="menu-menurow_${newUlCountNumber}"></ul>`);
+				let newElement = createNewElement(newId, newUlCountNumber)
+				newUlElement.append(newElement)
+				parentLi.append(newUlElement)
+			}
+
+			newAddEventlisteners(newId)
+		}
+		$("#menu-box").find(`i[id^='plus_']`).on('click', function() {
+			let clone = $(this)
+			plusButtonsclickEvent(clone)
+		});
+
+		// CREATE ROOT MENU ELEMENT
+		$("#new-root-menu").on('click', function() {
+			let rootUl = $("#menu-box").children('ul').first()
+			let newId = ($("#menu-box").find('li').length > 0) ? $("#menu-box").find('li').length + 1 : 1;
+			let newElement = createNewElement(newId, 1)
+			rootUl.prepend(newElement)
+
+			newAddEventlisteners(newId)
+		});
+
+		// MAKE MENU SAVE ARRAY
+		$("#save-menu").on('click', function() {		
+			window.myVar = {}
+			myVar.menu = []
+			myVar.count = 0
+			myVar.count_ul = 0
+			
+			const recursiveBulder = (ul_element) => {
+				myVar.count++;
+
+				let legoMenu = []
+
+				ul_element.children('li').each(function() {
+					myVar.count++;
+
+					let menuIns = {}
+					menuIns['id'] = $(this).attr('data-id')
+					menuIns['sequence'] = myVar.count;
+					menuIns['name'] = $(this).find("input[name='menuname']").val()
+
+					let searchUl = $(this).children('ul');
+					if (searchUl.length > 0) {
+						menuIns['child'] = recursiveBulder(searchUl)
+					}
+		
+					legoMenu.push(menuIns)
+				});
+				return legoMenu;
+			}
+			
+			$("#menu-box").children('ul').each(function() {
+				let ul_element = $(this)
+				myVar.menu = recursiveBulder(ul_element)
+				$('#menuarray').val(JSON.stringify(myVar.menu))
+				$('#menu-save').submit()
+				window.myVar = {}
+			});
+		});
+    }
 })

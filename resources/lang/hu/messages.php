@@ -121,7 +121,7 @@ return [
 	'adminmenu' => [
 		'textfrontend' => 'Frontend oldal',
 		'textindex' => 'Index', 
-		'textpagemenus' => 'Oldal Menüi', 
+		'textpagemenus' => 'Oldal Menü listája', 
 		'textuseroptions' => 'Profil beállítások', 
 		'textlogout' => 'Kijelentkezés', 
 	],
