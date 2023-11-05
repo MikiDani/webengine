@@ -2,6 +2,8 @@
 
 In this login engine, I use the basic "Auth" part for identification, and the "laravel passport" add-on is also installed in the api part.
 
+Dont forget to passport : php artisan passport:client --personal
+
 #### USE:
 
 php artisan erve (SERVER), npm run watch(REACT JSX converter)

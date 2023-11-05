@@ -217,6 +217,27 @@ $(document).ready(function() {
 
 		var menuSpeed = 20
 
+		//first count id-s
+		var firstIdCounterIds = function() {
+			$("#menu-box").find('li').each(function (){
+				let actualMaxId = parseInt($("#menu-box").attr('data-max-id'))
+				let liId = parseInt($(this).attr('data-id'))
+				console.log('max: '+ actualMaxId + '  elid: ' + liId)
+				if (actualMaxId < liId) {
+					$("#menu-box").attr('data-max-id', liId)
+				}
+			});
+			console.log('utanna max: '+ $("#menu-box").attr('data-max-id'))
+		}
+		firstIdCounterIds()
+
+		var maxIdCounter = function() {
+			let actualMaxId = parseInt($("#menu-box").attr('data-max-id'))
+			$("#menu-box").attr('data-max-id', actualMaxId + 1)
+
+			return actualMaxId + 1;
+		}
+
 		// ELEMENT CREATOR
 		var createNewElement = function (newId, ulCountNumber) {
 			let newElement = `
@@ -225,14 +246,30 @@ $(document).ready(function() {
 					<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
 					<i id="plus_${newId}" class="plus-button d-inline-block align-middle me-1"></i>
 					<i id="delete_${newId}" class="minus-button d-inline-block align-middle me-1"></i>
-					<input type="text" name="menuname" value="New element ${newId}" class="form-menuname d-inline-block align-middle">
+					<span class="align-middle">HU:</span>
+					<input type="text" name="menuname_hu" value="Új menüsor-${newId}" class="form-menuname d-inline-block align-middle">
+					<span class="align-middle">EN:</span>
+					<input type="text" name="menuname_en" value="New element-${newId}" class="form-menuname d-inline-block align-middle">
 					<i id="select_${newId}" class="select-button d-inline-block align-middle"></i>
 					<i id="openclose_${newId}" class="bi bi-filter mt-05 float-end d-inline-block align-middle"></i>
 				</div>
 			</li>`;
 			return newElement;
 		}
-		
+
+		// CREATE ROOT MENU ELEMENT
+		$("#new-root-menu").on('click', function() {
+			$('#nomenuelement').hide()
+
+			let rootUl = $("#menu-box").children('ul').first()
+			let newId = maxIdCounter();
+
+			let newElement = createNewElement(newId, 1)
+			rootUl.append(newElement)
+
+			newAddEventlisteners(newId)
+		});
+				
 		// ARANGEMENT MENU ELEMENTS
 		var arrangementMenuElements = function () {
 			$("ul[class^='menu-menurow_']").each(function() {
@@ -259,6 +296,10 @@ $(document).ready(function() {
 				let clone = $(this)
 				deleteAction(clone)
 			});
+			$("#menu-box").find(`i[id^='select_${newId}']`).on('click', function() {
+				let clone = $(this)
+				selectAction(clone)
+			});
 			arrangementMenuElements()
 		}
 		
@@ -266,7 +307,6 @@ $(document).ready(function() {
 		var openCloseAction = function(clone) {
 			var iconElement = clone
 			let childUl = clone.closest('.menu-sortable').find('ul')
-
 			if(childUl.length > 0) {
 				childUl.children('li').each(function() {
 					if ($(this).css('display') == 'none') {
@@ -287,12 +327,14 @@ $(document).ready(function() {
 		});
 
 		// SELECT
-		$("#menu-box").find("i[id^='select_']").on('click', function() {
-			console.log('CLICK!!!')
-			var iconElement = $(this)
-			let thisLi = iconElement.closest('.menu-sortable');
+		var selectAction = function(clone) {
+			let thisLi = clone.closest('.menu-sortable');
 			let thisId = thisLi.attr('data-id');
 			$("#menu-element-label").text('This menu element ID: ' + thisId)
+		}
+		$("#menu-box").find("i[id^='select_']").on('click', function() {
+			var clone = $(this)
+			selectAction(clone)
 		});
 
 		// DELETE
@@ -311,6 +353,9 @@ $(document).ready(function() {
 				} else {
 					// Not last li element. Only delete.
 					liELement.remove()
+				}
+				if ($('#menu-box').length == 0 || $('#menu-box ul').find('li').length == 0) {
+					$('#nomenuelement').show()
 				}
 			} else {
 				console.log('Van GYERMEK');
@@ -331,10 +376,6 @@ $(document).ready(function() {
 		// PLUS BUTTON
 		var plusButtonsclickEvent = function(clone) {
 			let newId = ($("#menu-box").find('li').length > 0) ? $("#menu-box").find('li').length + 1 : 1;
-			
-			console.log('NEW ID:');
-			console.log(newId);
-
 			let parentLi = clone.closest('.menu-sortable')
 	
 			if (parentLi.children('ul').length > 0) {
@@ -342,8 +383,7 @@ $(document).ready(function() {
 				let childUl = parentLi.children('ul')
 				let ulCountNumber = childUl.first().attr('data-count')
 				let newElement = createNewElement(newId, ulCountNumber)
-				
-				childUl.prepend(newElement)
+				childUl.append(newElement)
 			} else {
 				// no have children UL Now create.
 				parentLi.find("div i[id^='openclose_']").removeClass('bi-caret-down bi-caret-right-fill bi-filter')
@@ -363,16 +403,6 @@ $(document).ready(function() {
 			plusButtonsclickEvent(clone)
 		});
 
-		// CREATE ROOT MENU ELEMENT
-		$("#new-root-menu").on('click', function() {
-			let rootUl = $("#menu-box").children('ul').first()
-			let newId = ($("#menu-box").find('li').length > 0) ? $("#menu-box").find('li').length + 1 : 1;
-			let newElement = createNewElement(newId, 1)
-			rootUl.prepend(newElement)
-
-			newAddEventlisteners(newId)
-		});
-
 		// MAKE MENU SAVE ARRAY
 		$("#save-menu").on('click', function() {		
 			window.myVar = {}
@@ -382,34 +412,35 @@ $(document).ready(function() {
 			
 			const recursiveBulder = (ul_element) => {
 				myVar.count++;
-
 				let legoMenu = []
-
 				ul_element.children('li').each(function() {
 					myVar.count++;
-
 					let menuIns = {}
 					menuIns['id'] = $(this).attr('data-id')
 					menuIns['sequence'] = myVar.count;
-					menuIns['name'] = $(this).find("input[name='menuname']").val()
-
+					menuIns['menuname_hu'] = $(this).find("input[name='menuname_hu']").val()
+					menuIns['menuname_en'] = $(this).find("input[name='menuname_en']").val()
 					let searchUl = $(this).children('ul');
 					if (searchUl.length > 0) {
 						menuIns['child'] = recursiveBulder(searchUl)
 					}
-		
 					legoMenu.push(menuIns)
 				});
 				return legoMenu;
 			}
 			
-			$("#menu-box").children('ul').each(function() {
-				let ul_element = $(this)
-				myVar.menu = recursiveBulder(ul_element)
-				$('#menuarray').val(JSON.stringify(myVar.menu))
+			if ($("#menu-box").children('ul').length > 0) {
+				$("#menu-box").children('ul').each(function() {
+					let ul_element = $(this)
+					myVar.menu = recursiveBulder(ul_element)
+					$('#menuarray').val(JSON.stringify(myVar.menu))
+					$('#menu-save').submit()
+					window.myVar = {}
+				});
+			} else {
+				$('#menuarray').val(JSON.stringify(null))
 				$('#menu-save').submit()
-				window.myVar = {}
-			});
+			}
 		});
     }
 })

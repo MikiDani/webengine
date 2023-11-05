@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Menu;
+USE App\Models\Menulist;
 
 class BackendController extends Controller
 {
@@ -22,8 +23,11 @@ class BackendController extends Controller
 
 		$menuall = Menu::all()->first();
 		
-		$menuarray = json_decode($menuall->menujson);
-		
+		if($menuall !== null)
+			$menuarray = json_decode($menuall->menujson);
+		else
+			$menuarray = [];
+
 		return view('backend.admin_menus', [
 			'staticmenu' => $menuarray,
 		]);
@@ -33,14 +37,41 @@ class BackendController extends Controller
 	{
 		$menu_data = json_decode($request->menuarray);
 
-		//dump($menu_data);
-		
-		Menu::truncate();	// törli az előző tartalmat
+		Menu::truncate(); // törli az előző tartalmat
 
-		$insertedJsonData = [];
+		if ($menu_data !== null) {
 
-		foreach ($menu_data as $menu_row) {
-			array_push($insertedJsonData, $menu_row);
+			// menulist inserted
+			Menulist::query()->delete();
+			function recursive_getdata($menuelement)
+			{
+				Menulist::create([
+					'id_menu' => $menuelement['id'],
+					'menuname_hu' => $menuelement['menuname_hu'],
+					'menuname_en' => $menuelement['menuname_en'],
+				]);
+				
+				if (isset($menuelement['child']))
+					foreach($menuelement['child'] as $childelement)
+					{
+						$childelement = get_object_vars($childelement);
+						recursive_getdata($childelement);
+					}
+			}
+			foreach ($menu_data as $menuelement)
+			{
+				$menuelement = get_object_vars($menuelement);
+				recursive_getdata($menuelement);
+			}
+
+			//menu json inserted 
+			$insertedJsonData = [];
+
+			foreach ($menu_data as $menu_row) {
+				array_push($insertedJsonData, $menu_row);
+			}
+		} else {
+			$insertedJsonData = null;
 		}
 
 		$menu = new Menu();
@@ -58,7 +89,7 @@ class BackendController extends Controller
 		if (!in_array($lang, $validLanguages))
 			return back();
 
-		$cookie = cookie('selected_language', $lang, 60 * 24 * 7);
+		$cookie = cookie('selected_language', $lang, 60 * 24 * 7);	// 1 hét
 
 		return back()->withCookie($cookie);
 	}

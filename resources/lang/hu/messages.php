@@ -126,4 +126,11 @@ return [
 		'textlogout' => 'Kijelentkezés', 
 	],
 
+	// Page Menu List
+
+	'pagemenulist' => [
+		'menujsonisempty' => 'A menü jelenleg üres.',
+		'selectedelementlabel'=> 'Nincsen kiválasztva menü.',
+	],
+
 ];

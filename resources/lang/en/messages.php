@@ -126,4 +126,11 @@ return [
 		'textlogout' => 'Logout', 
 	],
 
+	// Page Menu List
+
+	'pagemenulist' => [
+		'menujsonisempty' => 'The menu is now empty.',
+		'selectedelementlabel'=> 'Element not selected.',
+	],
+
 ];

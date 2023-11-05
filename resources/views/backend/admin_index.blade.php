@@ -17,7 +17,7 @@
 	<p>{{ __('messages.adminindex.text01') }}</p>
 
 	<figure>
-		<img src="/img/image.jpg" alt="{{ __('messages.adminindex.text01alt') }}" class="w-100">
+		<img src="/img/image.jpg" alt="{{ __('messages.adminindex.text01alt') }}" class="w-50">
 		<figcaption>{{ __('messages.adminindex.textpic01figtcaption') }}</figcaption>
 	</figure>
 	

@@ -27,21 +27,20 @@
 			<input id="menuarray" type="hidden" name="menuarray" value="javacript">
 		</form>
 		<div class="menu-container row p-0 m-0">
-			<div id="menu-box" class="col-12 col-md-6 p-0 m-0">
-				@php $count = 0; @endphp
+			<div id="menu-box" data-max-id="0" class="col-12 col-md-8 p-0 m-0">
+				@php $count = 0; $displayValue = $staticmenu == null ? 'block' : 'none'; @endphp
 				<ul data-count="{{ $count }}" class="menu-menurow_{{ $count }} p-0 m-0 p-2">
-					@foreach ($staticmenu as $menu)
-						@include('backend._menu-item', ['menu' => $menu])
-					@endforeach
+					<div id="nomenuelement" class="p-0 m-0 p-2 mb-0 bg-info text-center rounded" style="display:{{ $displayValue }}">{{ __('messages.pagemenulist.menujsonisempty') }}</div>
+					@if($staticmenu !== null)
+						@foreach ($staticmenu as $menu)
+							@include('backend._menu-item', ['menu' => $menu])
+						@endforeach
+					@endif
 				</ul>
 			</div>
-			<div id="menu-element-box" class="col-12 col-md-6 p-0 m-0 p-2 bg-light rounded">
-				<div id="menu-element-label" class="p-0 m-0 p-2 ps-3 bg-primary rounded d-flex align-items-center text-bold">Label</div>
-
-				<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique saepe non, eum repudiandae quaerat quasi, quae ex molestias consequuntur, sequi ipsam doloremque sed assumenda facere? Quisquam voluptates possimus id minus.
-				Minima corporis similique ipsam accusamus vero, modi blanditiis. Minima eius at earum in aspernatur, non, a magni dolores maxime optio ullam error delectus eveniet ipsam quis. Qui doloremque quod ad.
-				Commodi, maxime! In rem eius soluta amet facere sequi error libero nam aut nulla iure sapiente, tenetur officiis? Voluptas atque quaerat ipsam praesentium officiis nesciunt sunt ea possimus deleniti in?
-				Aperiam, fugiat. Veniam natus sit voluptate perspiciatis.</p>
+			<div id="menu-element-box" class="col-12 col-md-4 p-0 m-0 p-2 pt-0 p-lg-2 bg-light rounded">
+				<div id="menu-element-label" class="p-0 m-0 p-2 ps-3 bg-primary rounded d-flex align-items-center text-bold">{{ __('messages.pagemenulist.selectedelementlabel') }}</div>
+				
 			</div>
 		</div>
 	</div>

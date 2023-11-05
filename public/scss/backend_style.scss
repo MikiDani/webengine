@@ -1,14 +1,15 @@
 
 $primary: #1fb71f;
 $secondary: #5cf45c;
-$danger: #ff4136;
 $warning: gold;
+$danger: #ff4136;
+$test: #e436ff;
 
 $theme-colors: (
 	"primary": $primary,
 	"secondary": $secondary,
 	"warning": $warning,
-	"danger": $danger
+	"danger": $danger,
 	);
 
 $color-01: #191919;
@@ -23,11 +24,10 @@ $color-underline-gold: gold;
 @import 'backend';
 
 .full-win {
-	width: 100vw;
+	width: 100%;
 	height:100vh;
 }
 
 .card {
 	max-width: 1000px;
 }
-

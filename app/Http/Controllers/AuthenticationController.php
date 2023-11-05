@@ -595,7 +595,7 @@ $return_respone['']['code'] = 0;
 		}
 		else
 		{
-			session()->flash('message', '<span class="text-danger">'. Lang::get('messages.auth.robot') . '</span>');
+			session()->flash('message', '<span class="text-danger">'. Lang::get('messages.auth.textrobot') . '</span>');
 			return redirect()->route('admin_registration')->withInput();
 		}
 	}
@@ -740,6 +740,8 @@ $return_respone['']['code'] = 0;
 				{
 					$user = User::find(session('userid'));
 					$user->password = Hash::make($request->password);
+					if (!$user->email_verified_at)
+						$user->email_verified_at = Carbon::now();
 					$user->save();
 					session()->flash('message', '<span class="text-black">' . $user->name . Lang::get('messages.auth.textyoucantry') . '</span>');
 					return redirect()->route('admin_login');
