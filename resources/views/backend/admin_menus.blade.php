@@ -40,7 +40,6 @@
 			</div>
 			<div id="menu-element-box" class="col-12 col-md-4 p-0 m-0 p-2 pt-0 p-lg-2 bg-light rounded">
 				<div id="menu-element-label" class="p-0 m-0 p-2 ps-3 bg-primary rounded d-flex align-items-center text-bold">{{ __('messages.pagemenulist.selectedelementlabel') }}</div>
-				
 			</div>
 		</div>
 	</div>

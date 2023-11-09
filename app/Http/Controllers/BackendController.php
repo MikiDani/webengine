@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Menu;
-USE App\Models\Menulist;
+use App\Models\Menulist;
+use App\Models\Menumodulelist;
 
 class BackendController extends Controller
 {
@@ -21,12 +22,36 @@ class BackendController extends Controller
 
 	public function admin_menus() {
 
+		// menuall
 		$menuall = Menu::all()->first();
-		
+				
 		if($menuall !== null)
 			$menuarray = json_decode($menuall->menujson);
 		else
 			$menuarray = [];
+
+		
+		// $modulelistelements = [];
+		// // menulist all
+		// $getmenulist = Menulist::all();
+		// foreach($getmenulist as $menuelement) {
+		// 	//dump($menuelement->id_menu);
+		// 	$row = Menumodulelist::where('id_menulist', $menuelement->id_menu)->get();
+		// 	$modulelistelements[$menuelement->id_menu] = $row;
+		// }
+		// dump($modulelistelements);
+
+
+
+
+
+
+		
+		// $let = Menumodulelist::where('id_menulist', '1')->get();
+
+		// dump($let);
+
+		// dd('stop');
 
 		return view('backend.admin_menus', [
 			'staticmenu' => $menuarray,
