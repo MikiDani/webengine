@@ -123,14 +123,17 @@ return [
 		'textindex' => 'Index', 
 		'textpagemenus' => 'Oldal Menü listája', 
 		'textuseroptions' => 'Profil beállítások', 
-		'textlogout' => 'Kijelentkezés', 
+		'textlogout' => 'Kijelentkezés',
 	],
 
 	// Page Menu List
 
 	'pagemenulist' => [
-		'menujsonisempty' => 'A menü jelenleg üres.',
-		'selectedelementlabel'=> 'Nincsen kiválasztva menü.',
+		'textmenujsonisempty' => 'A menü jelenleg üres.',
+		'textselectedelementlabel' => 'Nincsen kiválasztva menü.',
+		'textmoduletypelabel' => 'Modul típus:',
+		'textinsertnewmodule' => 'Új modul hozzáadása:',
+		'textaddnew' => 'Hozzáadás',
 	],
 
 ];

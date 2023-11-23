@@ -1,4 +1,4 @@
-import { OpenCloseDiv, OpenCloseDivPassword, DomCheckModify } from './scripts.js'
+import { OpenCloseDiv, OpenCloseDivPassword } from './scripts.js'
 
 //console.log(lang)
 
@@ -212,9 +212,13 @@ $(document).ready(function() {
 			min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
 		});
 	}
-	// MENU ELEMENT CREATOR ALL
+
+	//////////////////////////////
+	// MENU ELEMENT CREATOR ALL //
+	//////////////////////////////
 	if ($('#menu-box').length) {
 
+		window.myVar = {}
 		var menuSpeed = 20
 
 		//first count id-s
@@ -222,12 +226,10 @@ $(document).ready(function() {
 			$("#menu-box").find('li').each(function (){
 				let actualMaxId = parseInt($("#menu-box").attr('data-max-id'))
 				let liId = parseInt($(this).attr('data-id'))
-				console.log('max: '+ actualMaxId + '  elid: ' + liId)
 				if (actualMaxId < liId) {
 					$("#menu-box").attr('data-max-id', liId)
 				}
 			});
-			console.log('utanna max: '+ $("#menu-box").attr('data-max-id'))
 		}
 		firstIdCounterIds()
 
@@ -238,8 +240,8 @@ $(document).ready(function() {
 			return actualMaxId + 1;
 		}
 
-		// ELEMENT CREATOR
-		var createNewElement = function (newId, ulCountNumber) {
+		// MENULIST ELEMENT CREATOR
+		var createNewMenuListElement = function (newId, ulCountNumber) {
 			let newElement = `
 			<li id="${newId}" data-id="${newId}" class="menu-sortable menu-sortable_${ulCountNumber} menu-list-line-height">
 				<div class="menu-list-line-min-width bg-secondary p-2 m-1 text-center rounded">
@@ -257,6 +259,37 @@ $(document).ready(function() {
 			return newElement;
 		}
 
+		// MODULE ELEMENT CREATOR
+		var createNewModuleElement = function (menurowid, newModulelistid, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en) {
+			//textmoduletypelabel = bringing variable on blade
+			let newElement = `
+			<div id="menumodulelist_${newModulelistid}" data-modulelist-id="${newModulelistid}" class="module-sortable_${menurowid} pos-relative bg-primary p-3 pt-1 m-0 mb-2 rounded">
+				<div class="pos-module-arrow">
+					<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
+				</div>
+				<div class="pos-module-delete">
+					<i class="minus-button d-inline-block align-middle me-1"></i>
+				</div>
+				<div class="text-center text-small">modulelistid: ${newModulelistid}</div>
+				<input type="hidden" name="edit[${menurowid}][${newModulelistid}][moduletype]" value="${moduleTypeId}">
+				<span class="text-center">${textmoduletypelabel} <strong>${moduleTypeName}</strong></span>
+				<div class="p-0 m-0 d-flex justify-content-start align-items-center">
+					<div class="p-0 m-0 width-10">HU:</div>
+					<div class="p-0 m-0 width-90">
+						<input type="text" name="edit[${menurowid}][${newModulelistid}][modulename_hu]" value="${new_modulename_hu}" class="form-control">
+					</div>
+				</div>
+				<div class="p-0 m-0 d-flex justify-content-start align-items-center mt-1">
+					<div class="p-0 m-0 width-10">EN:</div>
+					<div class="p-0 m-0 width-90">
+						<input type="text" name="edit[${menurowid}][${newModulelistid}][modulename_en]" value="${new_modulename_en}" class="form-control">
+					</div>
+				</div>
+			</div>
+			`;
+			return newElement;
+		}
+
 		// CREATE ROOT MENU ELEMENT
 		$("#new-root-menu").on('click', function() {
 			$('#nomenuelement').hide()
@@ -264,7 +297,7 @@ $(document).ready(function() {
 			let rootUl = $("#menu-box").children('ul').first()
 			let newId = maxIdCounter();
 
-			let newElement = createNewElement(newId, 1)
+			let newElement = createNewMenuListElement(newId, 1)
 			rootUl.append(newElement)
 
 			newAddEventlisteners(newId)
@@ -280,6 +313,37 @@ $(document).ready(function() {
 			});
 		}
 		arrangementMenuElements()	// first load
+		
+		// ARANGEMENT MODULE ELEMENTS
+		var arrangementModuleElements = function () {
+			$("div[class^='modulerow_']").each(function() {
+				
+				let thisId = $(this).attr('data-id')
+
+				$(this).sortable({
+					connectWith: `.module-sortable_${thisId}`
+				}).disableSelection();
+			});
+		}
+		arrangementModuleElements()	// first load
+
+		var menuModuleListMaxIdCounter = function() {
+			$("div[id^='menumodulelist_']").each(function() {
+				let dataMaxId = $("#menu-module-box").attr('data-menumodulelist-maxid')
+				let thisId = $(this).attr('data-modulelist-id')
+				if (thisId >= dataMaxId)	{
+					$("#menu-module-box").attr('data-menumodulelist-maxid', thisId)
+					console.log('menumodulelist maxid: ' + $("#menu-module-box").attr('data-menumodulelist-maxid'))
+				}
+			})
+			let actualMaxId = parseInt($("#menu-module-box").attr('data-menumodulelist-maxid')) + 1
+
+			$("#new_modulename_hu").attr('value', `Új modul ${actualMaxId}`)
+			$("#new_modulename_en").attr('value', `New Module ${actualMaxId}`)
+
+			return actualMaxId;
+		}
+		menuModuleListMaxIdCounter()  // first load
 
 		// ADD EVENTLISTENERS
 		var newAddEventlisteners = function(newId) {
@@ -328,11 +392,35 @@ $(document).ready(function() {
 
 		// SELECT
 		var selectAction = function(clone) {
-			let thisLi = clone.closest('.menu-sortable');
-			let thisId = thisLi.attr('data-id');
-			$("#menu-element-label").text('This menu element ID: ' + thisId)
+			$("#new_menumodule").show();	// Add new module show
+
+			let thisLi = clone.closest('.menu-sortable')
+			let thisId = thisLi.attr('data-id')
+			myVar.selectedModuleId = thisId
+
+			console.log(myVar.selectedModuleId)
+
+			var findElement = false
+
+			$("div[class^='modulerow_']").each(function() {
+
+				if (thisId == $(this).attr('data-id')) {
+					findElement = true
+					$("#menu-module-label").text('This menu element ID: ' + thisId)
+					$(this).show()
+				} else {
+					$("#menu-module-label").text('This menu element ID: ' + thisId)
+					$(this).hide()
+				}
+			})
+
+			if (!findElement) {
+				$("#menu-module-label").text('MÉG ÜRES! element ID: ' + thisId)
+			}
 		}
 		$("#menu-box").find("i[id^='select_']").on('click', function() {
+			$("#menu-box").find(".selected-menuelement-bg").removeClass("selected-menuelement-bg")
+			$(this).closest('.menu-list-line-min-width').addClass('selected-menuelement-bg')
 			var clone = $(this)
 			selectAction(clone)
 		});
@@ -349,7 +437,7 @@ $(document).ready(function() {
 					parentElementOpenCloseIcon.removeClass('bi-caret-down bi-caret-right-fill bi-filter')
 					parentElementOpenCloseIcon.addClass(' bi-filter')
 
-					liELement.parent().remove();
+					liELement.parent().remove()
 				} else {
 					// Not last li element. Only delete.
 					liELement.remove()
@@ -358,13 +446,13 @@ $(document).ready(function() {
 					$('#nomenuelement').show()
 				}
 			} else {
-				console.log('Van GYERMEK');
-				childUl.css('border-radius', '0.5rem');
-				childUl.css('background-color', 'gold');
+				// Have children, cannot delete parent
+				childUl.css('border-radius', '0.5rem')
+				childUl.css('background-color', 'gold')
 			
 				var intervalId = setInterval(function () {
-					childUl.css('background-color', 'white');
-					clearInterval(intervalId);
+					childUl.css('background-color', 'white')
+					clearInterval(intervalId)
 				}, 1000);
 			}
 		}
@@ -375,23 +463,25 @@ $(document).ready(function() {
 
 		// PLUS BUTTON
 		var plusButtonsclickEvent = function(clone) {
-			let newId = ($("#menu-box").find('li').length > 0) ? $("#menu-box").find('li').length + 1 : 1;
+			let newId = parseInt($("#menu-box").attr('data-max-id')) + 1
+			$("#menu-box").attr('data-max-id', newId)
+
 			let parentLi = clone.closest('.menu-sortable')
 	
 			if (parentLi.children('ul').length > 0) {
-				// have children UL
+				// Have children UL
 				let childUl = parentLi.children('ul')
 				let ulCountNumber = childUl.first().attr('data-count')
-				let newElement = createNewElement(newId, ulCountNumber)
+				let newElement = createNewMenuListElement(newId, ulCountNumber)
 				childUl.append(newElement)
 			} else {
-				// no have children UL Now create.
+				// No have children UL Now create
 				parentLi.find("div i[id^='openclose_']").removeClass('bi-caret-down bi-caret-right-fill bi-filter')
 				parentLi.find("div i[id^='openclose_']").addClass('bi-caret-down')
 
 				let newUlCountNumber = $("#menu-box").find('ul').length + 1
 				let newUlElement = $(`<ul data-count="${newUlCountNumber}" class="menu-menurow_${newUlCountNumber}"></ul>`);
-				let newElement = createNewElement(newId, newUlCountNumber)
+				let newElement = createNewMenuListElement(newId, newUlCountNumber)
 				newUlElement.append(newElement)
 				parentLi.append(newUlElement)
 			}
@@ -403,9 +493,38 @@ $(document).ready(function() {
 			plusButtonsclickEvent(clone)
 		});
 
+		//ADD MODULE BUTTON
+		$("#add-module-button").on('click', function () {
+
+			var createModuleElement = function (parentElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en) {
+				let newModulelistid = menuModuleListMaxIdCounter();
+				$("#new_modulename_hu").attr('value', `Új modul ${newModulelistid + 1}`)
+				$("#new_modulename_en").attr('value', `New Module ${newModulelistid + 1}`)
+				let newModuleElement = createNewModuleElement(myVar.selectedModuleId, newModulelistid, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+				parentElement.prepend(newModuleElement)
+			}
+
+			let moduleTypeId = $("select[name='new_moduletype']").val()
+			let moduleTypeName = $("select[name='new_moduletype'] option:selected").text()
+			let new_modulename_hu = $("#new_modulename_hu").val()
+			let new_modulename_en = $("#new_modulename_en").val()
+
+			let findingElement = $("#menu-module-box").find(`.modulerow_${myVar.selectedModuleId}`)
+
+			// isset modulelist
+			if (findingElement.length > 0) {
+				createModuleElement(findingElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+			// not isset modulelist
+			} else {
+				let newDivElement = `<div class="modulerow_${myVar.selectedModuleId} p-0 m-0" data-id="${myVar.selectedModuleId}"></div>`;
+				$("#menu-module-label").after(newDivElement)
+				let findingElement = $("#menu-module-box").find(`.modulerow_${myVar.selectedModuleId}`)
+				createModuleElement(findingElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+			}
+		});
+
 		// MAKE MENU SAVE ARRAY
-		$("#save-menu").on('click', function() {		
-			window.myVar = {}
+		$("#save-menu").on('click', function() {
 			myVar.menu = []
 			myVar.count = 0
 			myVar.count_ul = 0
@@ -443,4 +562,5 @@ $(document).ready(function() {
 			}
 		});
     }
+
 })

@@ -30,22 +30,4 @@ class OpenCloseDivPassword extends OpenCloseDiv {
 	}
 }
 
-class DomCheckModify {
-	constructor(elementId) {
-		this.element = document.getElementById(elementId)        
-		
-		var clone = this
-		
-		var observer = new MutationObserver(function(mutations) {
-			console.log(clone.element)
-			console.log(mutations)
-			console.log("A DOM megváltozott a myElement elemen.")
-		});
-
-		var config = { childList: true, subtree: true };
-
-		observer.observe(this.element, config);
-	}
-}
-
-export { OpenCloseDiv, OpenCloseDivPassword, DomCheckModify }
+export { OpenCloseDiv, OpenCloseDivPassword }

@@ -9,10 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menulist', function(Blueprint $table) {
-            $table->id();
-
-            $table->integer('id_menu');         ///  ???? NEM IS KELLL   AZ ID KELL
-
+            $table->bigInteger('id')->unsigned()->primary();
 
             $table->string('menuname_hu');
             $table->string('menuname_en');

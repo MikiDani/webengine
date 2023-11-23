@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Module_news extends Model
+class Module_sendemail extends Model
 {
-    protected $table		= 'module_news';
+    protected $table		= 'module_sendemail';
 	protected $primaryKey	= 'id';
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'id_menumodulelist', 'news_datetime', 'news_title', 'news_message', 'news_image', 'news_link',
+		'id_menumodulelist', 'sendemail_email', 'sendemail_label', 'sendemail_message',
 	];
 }

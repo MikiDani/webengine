@@ -8,16 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create("module_news", function (Blueprint $table) {
+        Schema::create("module_sendemail", function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('id_menumodulelist')->constrained('menumodulelist')->onDelete('cascade');
 
-            $table->datetime('news_datetime');
-            $table->string('news_title');
-            $table->longText('news_message');
-            $table->string('news_image');
-            $table->string('news_link');
+            $table->string('sendemail_email', 50);
+            $table->string('sendemail_label', 255);
+            $table->longText('sendemail_message');
 
             $table->timestamps();
         });
@@ -25,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists("module_news");
+        Schema::dropIfExists("module_sendemail");
     }
 };

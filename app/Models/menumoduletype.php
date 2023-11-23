@@ -11,6 +11,6 @@ class Menumoduletype extends Model
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'name',
+		'name', 'bladename'
 	];
 }

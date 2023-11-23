@@ -86,3 +86,27 @@ input + label.error {
 #selectlang {
 	min-width: 4rem;
 }
+
+.pos-relative {
+	position: relative;
+}
+
+.pos-module-arrow {
+	position: absolute;
+	left: 3px;
+	top: 3px;
+}
+
+.pos-module-delete {
+	position: absolute;
+	right: 0;
+	top: 3px;
+}
+
+.text-small {
+	font-size: 0.7rem !important;
+}
+
+.selected-menuelement-bg {
+	background-color: #0ee8ec !important;
+}

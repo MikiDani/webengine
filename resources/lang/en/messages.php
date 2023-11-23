@@ -129,8 +129,11 @@ return [
 	// Page Menu List
 
 	'pagemenulist' => [
-		'menujsonisempty' => 'The menu is now empty.',
-		'selectedelementlabel'=> 'Element not selected.',
+		'textmenujsonisempty' => 'The menu is now empty.',
+		'textselectedelementlabel' => 'Element not selected.',
+		'textmoduletypelabel' => 'Module type:',
+		'textinsertnewmodule' => 'Insert New Module:',
+		'textaddnew' => 'Inserted',
 	],
 
 ];

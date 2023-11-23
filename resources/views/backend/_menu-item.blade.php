@@ -6,9 +6,9 @@
         <i id="plus_{{ $menu->id }}" class="plus-button d-inline-block align-middle me-1"></i>
         <i id="delete_{{ $menu->id }}" class="minus-button d-inline-block align-middle me-1"></i>
         <span class="align-middle">HU:</span>
-        <input type="text" name="menuname_hu" value="{{ $menu->menuname_hu }}" class="form-menuname d-inline-block align-middle">
+        <input type="text" name="menuname_hu" value="{{ $menu->menuname_hu }}" class="form-menuname d-inline-block align-middle" form="null">
         <span class="align-middle">EN:</span>
-        <input type="text" name="menuname_en" value="{{ $menu->menuname_en }}" class="form-menuname d-inline-block align-middle">
+        <input type="text" name="menuname_en" value="{{ $menu->menuname_en }}" class="form-menuname d-inline-block align-middle" form="null">
         <i id="select_{{ $menu->id }}" class="select-button d-inline-block align-middle"></i>
         @if (isset($menu->child) && !empty($menu->child))
             <i id="openclose_{{ $menu->id }}" class="bi bi-caret-down mt-05 float-end d-inline-block align-middle"></i>
