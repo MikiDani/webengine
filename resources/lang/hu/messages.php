@@ -135,6 +135,8 @@ return [
 		'textinsertnewmodule' => 'Új modul hozzáadása:',
 		'textaddnew' => 'Hozzáadás',
 		'textmoduledeletealert' => 'Biztos vagy benne hogy törlöd?',
+		'textselectmodulebutton' => 'Modul kiválasztása',
+		'textmustbesaved' => 'Muszáj menteni',
 	],
 
 ];

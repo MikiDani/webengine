@@ -13,6 +13,7 @@ return new class extends Migration
 
             $table->foreignId('id_menumodulelist')->constrained('menumodulelist')->onDelete('cascade');
 
+            $table->string('sequence', 4);
             $table->datetime('news_datetime');
             $table->string('news_title');
             $table->longText('news_message');

@@ -292,8 +292,8 @@ $(document).ready(function() {
 						<input type="text" name="edit[${menurowid}][${newModulelistid}][modulename_en]" value="${new_modulename_en}" class="form-control">
 					</div>
 				</div>
-			</div>
-			`;
+				<div id="selectmodule_${newModulelistid}" class="btn bg-warning mt-1 w-100">${textmustbesaved}</div>
+			</div>`;
 			return newElement;
 		}
 
@@ -345,8 +345,9 @@ $(document).ready(function() {
 			})
 			let actualMaxId = parseInt($("#menu-module-box").attr('data-menumodulelist-maxid')) + 1
 
-			$("#new_modulename_hu").attr('value', `Új modul ${actualMaxId}`)
-			$("#new_modulename_en").attr('value', `New Module ${actualMaxId}`)
+			$("#new_modulename_hu").attr('value', `Új modul ${actualMaxId}`); $("#new_modulename_hu").val(`Új modul ${actualMaxId}`)
+			$("#new_modulename_en").attr('value', `New Module ${actualMaxId}`); $("#new_modulename_en").val(`Új modul ${actualMaxId}`)
+			$('*').blur();
 
 			return actualMaxId;
 		}
@@ -412,7 +413,10 @@ $(document).ready(function() {
 
 		// SELECT
 		var selectAction = function(clone) {
-			$("#new_menumodule").show();	// Add new module show
+			
+			
+			menuModuleListMaxIdCounter()
+			$("#new_menumodule").show()
 
 			let thisLi = clone.closest('.menu-sortable')
 			var thisId = thisLi.attr('data-id')
@@ -441,10 +445,8 @@ $(document).ready(function() {
 			var childUl = clone.closest('.menu-sortable').find('ul')
 			
 			if(!(childUl.length > 0)) {
-
 				let question = confirm(textmoduledeletealert);
 				if (question == true) {
-
 					if (liELement.siblings().length == 0) {
 						// Last li element. Delete environment and parent element openclose icon reset standard position
 						let parentElementOpenCloseIcon = liELement.parent().closest('.menu-sortable').find("i[id^='openclose_']")
@@ -456,7 +458,6 @@ $(document).ready(function() {
 						// Not last li element. Only delete.
 						liELement.remove()
 					}
-
 					// DELETE MODULES ELEMENTS
 					if ($(`.modulerow_${dataId}`).length > 0) {
 						$(`.modulerow_${dataId}`).remove()
@@ -465,12 +466,11 @@ $(document).ready(function() {
 							$('#new_menumodule').hide()
 						}
 					}
-
+					// IF MENU-BOX EMPTY
 					if ($('#menu-box').length == 0 || $('#menu-box ul').find('li').length == 0) {
 						$('#nomenuelement').show()
 					}
 				}
-
 			} else {
 				// Have children, cannot delete parent
 				childUl.css('border-radius', '0.5rem')
@@ -554,8 +554,13 @@ $(document).ready(function() {
 
 				arrangementModuleElements()
 			}
-			$(`#menumodulelist_${newModulelistid}`).find(`i[data-modulelist-id='${newModulelistid}']`).on('click', function() {				
+			// DELETE button
+			$(`#menumodulelist_${newModulelistid}`).find(`i[data-modulelist-id='${newModulelistid}']`).on('click', function() {
 				buttonDeleteModuleAction($(this))
+			});
+			// SAVE button
+			$(`#selectmodule_${newModulelistid}`).on('click', function() {
+				$("#save-menu").click();
 			});
 		});
 

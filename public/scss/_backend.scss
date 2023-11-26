@@ -108,5 +108,9 @@ input + label.error {
 }
 
 .selected-menuelement-bg {
-	background-color: #0ee8ec !important;
+	background-color: $selected !important;
+}
+
+.bg-selectmodulebutton {
+	background-color: $selected !important;
 }

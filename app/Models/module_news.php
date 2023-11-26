@@ -12,6 +12,6 @@ class Module_news extends Model
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'id_menumodulelist', 'news_datetime', 'news_title', 'news_message', 'news_image', 'news_link',
+		'id_menumodulelist', 'sequence', 'news_datetime', 'news_title', 'news_message', 'news_image', 'news_link',
 	];
 }

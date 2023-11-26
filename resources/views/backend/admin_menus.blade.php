@@ -5,15 +5,10 @@
 @endsection
 
 @section('content')
-
 	@include('backend.admin_menu')
-
-	<div class="p-3 bg-info">menulistid: {{ $menulistid }}</div>
-
 	<form id="menu-save" method="post" action="{{ route('menu_save') }}" class="p-0 m-0">
 		@csrf
 		<input id="menuarray" type="hidden" name="menuarray" value="javacript">
-
 		<div class="row card mt-3 mx-auto">
 			@if(session('message'))
 				<div class="p-3 bg-info rounded">
@@ -71,7 +66,7 @@
 												<input type="text" name="edit[{{ $menurowid }}][{{ $modulelistid }}][modulename_en]" value="{{ $modulevalue['modulename_en'] }}" class="form-control">
 											</div>
 										</div>
-										{{-- @php dump($modulevalue); @endphp --}}
+										<a id="selectmodule_{{ $menurowid }}" href="{{ route('admin_module', ['menuid' => $menurowid, 'moduleid' => $modulelistid]) }}" class="btn bg-selectmodulebutton mt-1 w-100">{{ __('messages.pagemenulist.textselectmodulebutton') }}</a>
 									</div>
 								@endforeach
 							</div>
@@ -80,7 +75,7 @@
 					<div id="new_menumodule" class="pos-relative bg-secondary p-3 pt-1 m-0 mb-2 rounded" style="display:none;">
 						<div class="text-center pb-1"><strong>{{ __('messages.pagemenulist.textinsertnewmodule') }}</strong></div>
 						<div class="p-0 m-0 d-flex justify-content-start align-items-center">
-							<div class="p-0 m-0 width-40">{{ __('messages.pagemenulist.textmoduletypelabel') }}: </div>
+							<div class="p-0 m-0 width-40">{{ __('messages.pagemenulist.textmoduletypelabel') }}</div>
 							<div class="p-0 m-0 width-60">
 								<select name="new_moduletype" class="form-control" form="null">
 									@foreach($moduletypes as $moduletype)
@@ -113,5 +108,7 @@
 		var textmoduletypelabel = "{{ __('messages.pagemenulist.textmoduletypelabel') }}"
 		var textmoduledeletealert = "{{ __('messages.pagemenulist.textmoduledeletealert') }}"
 		var textselectedelementlabel = "{{ __('messages.pagemenulist.textselectedelementlabel') }}"
+		var textselectmodulebutton = "{{ __('messages.pagemenulist.textselectmodulebutton') }}"
+		var textmustbesaved = "{{ __('messages.pagemenulist.textmustbesaved') }}"
 	</script>
 @endsection

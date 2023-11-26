@@ -135,6 +135,8 @@ return [
 		'textinsertnewmodule' => 'Insert New Module:',
 		'textaddnew' => 'Inserted',
 		'textmoduledeletealert' => 'Are you sure how to delete?',
+		'textselectmodulebutton' => 'Select Module',
+		'textmustbesaved' => 'Must be saved',
 	],
 
 ];

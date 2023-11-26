@@ -11884,6 +11884,10 @@ input + label.error {
   background-color: #0ee8ec !important;
 }
 
+.bg-selectmodulebutton {
+  background-color: #0ee8ec !important;
+}
+
 .full-win {
   width: 100%;
   height: 100vh;
