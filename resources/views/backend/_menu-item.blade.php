@@ -4,7 +4,7 @@
     <div class="menu-list-line-min-width bg-primary p-2 m-1 text-center rounded">
         <i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
         <i id="plus_{{ $menu->id }}" class="plus-button d-inline-block align-middle me-1"></i>
-        <i id="delete_{{ $menu->id }}" class="minus-button d-inline-block align-middle me-1"></i>
+        <i id="delete_{{ $menu->id }}" class="minus-button-menulist d-inline-block align-middle me-1"></i>
         <span class="align-middle">HU:</span>
         <input type="text" name="menuname_hu" value="{{ $menu->menuname_hu }}" class="form-menuname d-inline-block align-middle" form="null">
         <span class="align-middle">EN:</span>

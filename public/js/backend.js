@@ -240,14 +240,21 @@ $(document).ready(function() {
 			return actualMaxId + 1;
 		}
 
+		// OPEN ACTUAL MENU
+		if (page_menulistid) {
+			$(document).ready(function() {
+				$(`#select_${page_menulistid}`).click()
+			});
+		}
+
 		// MENULIST ELEMENT CREATOR
 		var createNewMenuListElement = function (newId, ulCountNumber) {
 			let newElement = `
 			<li id="${newId}" data-id="${newId}" class="menu-sortable menu-sortable_${ulCountNumber} menu-list-line-height">
-				<div class="menu-list-line-min-width bg-secondary p-2 m-1 text-center rounded">
+				<div class="menu-list-line-min-width bg-primary p-2 m-1 text-center rounded">
 					<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
 					<i id="plus_${newId}" class="plus-button d-inline-block align-middle me-1"></i>
-					<i id="delete_${newId}" class="minus-button d-inline-block align-middle me-1"></i>
+					<i id="delete_${newId}" class="minus-button-menulist d-inline-block align-middle me-1" data-modulelist-id="${newId}"></i>
 					<span class="align-middle">HU:</span>
 					<input type="text" name="menuname_hu" value="Új menüsor-${newId}" class="form-menuname d-inline-block align-middle">
 					<span class="align-middle">EN:</span>
@@ -264,14 +271,14 @@ $(document).ready(function() {
 			//textmoduletypelabel = bringing variable on blade
 			let newElement = `
 			<div id="menumodulelist_${newModulelistid}" data-modulelist-id="${newModulelistid}" class="module-sortable_${menurowid} pos-relative bg-primary p-3 pt-1 m-0 mb-2 rounded">
+				<input type="hidden" name="edit[${menurowid}][${newModulelistid}][moduletype]" value="${moduleTypeId}">
 				<div class="pos-module-arrow">
 					<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
 				</div>
 				<div class="pos-module-delete">
-					<i class="minus-button d-inline-block align-middle me-1"></i>
+					<i class="minus-button-module d-inline-block align-middle me-1" data-modulelist-id="${newModulelistid}"></i>
 				</div>
 				<div class="text-center text-small">modulelistid: ${newModulelistid}</div>
-				<input type="hidden" name="edit[${menurowid}][${newModulelistid}][moduletype]" value="${moduleTypeId}">
 				<span class="text-center">${textmoduletypelabel} <strong>${moduleTypeName}</strong></span>
 				<div class="p-0 m-0 d-flex justify-content-start align-items-center">
 					<div class="p-0 m-0 width-10">HU:</div>
@@ -312,7 +319,7 @@ $(document).ready(function() {
 				}).disableSelection();
 			});
 		}
-		arrangementMenuElements()	// first load
+		arrangementMenuElements() // first load
 		
 		// ARANGEMENT MODULE ELEMENTS
 		var arrangementModuleElements = function () {
@@ -366,6 +373,19 @@ $(document).ready(function() {
 			});
 			arrangementMenuElements()
 		}
+
+		// BUTTON DELETE MODULE
+		var buttonDeleteModuleAction = function (element) {
+			let question = confirm(textmoduledeletealert);
+			if (question == true) {
+				let thisId = element.attr('data-modulelist-id')
+				$(`#menumodulelist_${thisId}`).remove()
+				console.log("Felhasználó megerősítette.")
+			}
+		}
+		$(".minus-button-module").on('click', function () {
+			buttonDeleteModuleAction($(this))
+		});
 		
 		// OPEN / CLOSE
 		var openCloseAction = function(clone) {
@@ -395,28 +415,17 @@ $(document).ready(function() {
 			$("#new_menumodule").show();	// Add new module show
 
 			let thisLi = clone.closest('.menu-sortable')
-			let thisId = thisLi.attr('data-id')
+			var thisId = thisLi.attr('data-id')
 			myVar.selectedModuleId = thisId
+
+			$("#id_menulist").val(thisId)
 
 			console.log(myVar.selectedModuleId)
 
-			var findElement = false
-
 			$("div[class^='modulerow_']").each(function() {
-
-				if (thisId == $(this).attr('data-id')) {
-					findElement = true
-					$("#menu-module-label").text('This menu element ID: ' + thisId)
-					$(this).show()
-				} else {
-					$("#menu-module-label").text('This menu element ID: ' + thisId)
-					$(this).hide()
-				}
+				$("#menu-module-label").text('This menu element ID: ' + thisId)
+				if (thisId == $(this).attr('data-id')) { $(this).show() } else { $(this).hide() }
 			})
-
-			if (!findElement) {
-				$("#menu-module-label").text('MÉG ÜRES! element ID: ' + thisId)
-			}
 		}
 		$("#menu-box").find("i[id^='select_']").on('click', function() {
 			$("#menu-box").find(".selected-menuelement-bg").removeClass("selected-menuelement-bg")
@@ -428,23 +437,40 @@ $(document).ready(function() {
 		// DELETE
 		var deleteAction = function(clone) {
 			let liELement = clone.closest('.menu-sortable')
+			let dataId = liELement.attr('data-id')
 			var childUl = clone.closest('.menu-sortable').find('ul')
-
+			
 			if(!(childUl.length > 0)) {
-				if (liELement.siblings().length == 0) {
-					// Last li element. Delete environment and parent element openclose icon reset standard position
-					let parentElementOpenCloseIcon = liELement.parent().closest('.menu-sortable').find("i[id^='openclose_']")
-					parentElementOpenCloseIcon.removeClass('bi-caret-down bi-caret-right-fill bi-filter')
-					parentElementOpenCloseIcon.addClass(' bi-filter')
 
-					liELement.parent().remove()
-				} else {
-					// Not last li element. Only delete.
-					liELement.remove()
+				let question = confirm(textmoduledeletealert);
+				if (question == true) {
+
+					if (liELement.siblings().length == 0) {
+						// Last li element. Delete environment and parent element openclose icon reset standard position
+						let parentElementOpenCloseIcon = liELement.parent().closest('.menu-sortable').find("i[id^='openclose_']")
+						parentElementOpenCloseIcon.removeClass('bi-caret-down bi-caret-right-fill bi-filter')
+						parentElementOpenCloseIcon.addClass(' bi-filter')
+
+						liELement.parent().remove()
+					} else {
+						// Not last li element. Only delete.
+						liELement.remove()
+					}
+
+					// DELETE MODULES ELEMENTS
+					if ($(`.modulerow_${dataId}`).length > 0) {
+						$(`.modulerow_${dataId}`).remove()
+						if (dataId == myVar.selectedModuleId) {
+							$('#menu-module-label').text(textselectedelementlabel)
+							$('#new_menumodule').hide()
+						}
+					}
+
+					if ($('#menu-box').length == 0 || $('#menu-box ul').find('li').length == 0) {
+						$('#nomenuelement').show()
+					}
 				}
-				if ($('#menu-box').length == 0 || $('#menu-box ul').find('li').length == 0) {
-					$('#nomenuelement').show()
-				}
+
 			} else {
 				// Have children, cannot delete parent
 				childUl.css('border-radius', '0.5rem')
@@ -461,7 +487,7 @@ $(document).ready(function() {
 			deleteAction(clone)
 		});
 
-		// PLUS BUTTON
+		// PLUS MENU BUTTON
 		var plusButtonsclickEvent = function(clone) {
 			let newId = parseInt($("#menu-box").attr('data-max-id')) + 1
 			$("#menu-box").attr('data-max-id', newId)
@@ -501,7 +527,10 @@ $(document).ready(function() {
 				$("#new_modulename_hu").attr('value', `Új modul ${newModulelistid + 1}`)
 				$("#new_modulename_en").attr('value', `New Module ${newModulelistid + 1}`)
 				let newModuleElement = createNewModuleElement(myVar.selectedModuleId, newModulelistid, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+
 				parentElement.prepend(newModuleElement)
+
+				return newModulelistid;
 			}
 
 			let moduleTypeId = $("select[name='new_moduletype']").val()
@@ -511,16 +540,23 @@ $(document).ready(function() {
 
 			let findingElement = $("#menu-module-box").find(`.modulerow_${myVar.selectedModuleId}`)
 
+			let newModulelistid
+
 			// isset modulelist
 			if (findingElement.length > 0) {
-				createModuleElement(findingElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+				newModulelistid = createModuleElement(findingElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
 			// not isset modulelist
 			} else {
 				let newDivElement = `<div class="modulerow_${myVar.selectedModuleId} p-0 m-0" data-id="${myVar.selectedModuleId}"></div>`;
 				$("#menu-module-label").after(newDivElement)
 				let findingElement = $("#menu-module-box").find(`.modulerow_${myVar.selectedModuleId}`)
-				createModuleElement(findingElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+				newModulelistid = createModuleElement(findingElement, moduleTypeId, moduleTypeName, new_modulename_hu, new_modulename_en)
+
+				arrangementModuleElements()
 			}
+			$(`#menumodulelist_${newModulelistid}`).find(`i[data-modulelist-id='${newModulelistid}']`).on('click', function() {				
+				buttonDeleteModuleAction($(this))
+			});
 		});
 
 		// MAKE MENU SAVE ARRAY

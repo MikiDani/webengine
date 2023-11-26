@@ -134,6 +134,7 @@ return [
 		'textmoduletypelabel' => 'Modul típus:',
 		'textinsertnewmodule' => 'Új modul hozzáadása:',
 		'textaddnew' => 'Hozzáadás',
+		'textmoduledeletealert' => 'Biztos vagy benne hogy törlöd?',
 	],
 
 ];
