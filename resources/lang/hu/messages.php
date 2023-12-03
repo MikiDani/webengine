@@ -139,4 +139,14 @@ return [
 		'textmustbesaved' => 'Muszáj menteni',
 	],
 
+	'modules' => [
+		'textnewstitle' => 'Cím',
+		'textnewsmessage' => 'Szöveg',
+		'textnewsdatetime' => 'Dátum',
+		'textnewsimage' => 'Kép',
+		'textnewslink' => 'URL link',
+		'textnewssubmit' => 'Új hír hozzáadása',
+		'texteditsubmit' => 'Módosítások mentése',
+	],
+
 ];

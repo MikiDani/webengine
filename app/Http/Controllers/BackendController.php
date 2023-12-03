@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-
-use App\Models\Menumoduletype;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Services\Appservice;
+use App\Models\Menumoduletype;
 use App\Models\Menu;
 use App\Models\Menulist;
 use App\Models\Menumodulelist;
@@ -27,10 +25,7 @@ class BackendController extends Controller
 	}
 
 	public function admin_menus($menulistid = null) {
-
-		print "menulistid";
-		dump($menulistid);
-
+		
 		$moduletypes = Menumoduletype::all();
 
 		// menuall
@@ -221,26 +216,106 @@ class BackendController extends Controller
 		if ($menuid == null || $moduleid == null)
 			return redirect()->route('admin_menus');
 		
+		$menu = Menulist::where('id', $menuid)->first()->toArray();
 		$module = Menumodulelist::where('id', $moduleid)->where('id_menulist', $menuid)->first();
+		$moduletype = Menumoduletype::find($module->id_moduletype)->toArray();
 		
 		if ($module == null)
 			return redirect()->route('admin_menus');
 	
 		$module = $module->toArray();
-	
+
 		// NEWS MODULE
 		if ($module['id_moduletype'] == 1)
 		{
-			$news = Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get();
-			$news = $news->toArray();
-
-			return view('backend.modules.admin_news_module', [
-				'module' => $module,
-				'news' => $news,
-			]);
+			$moduledata = Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()->toArray();
+			$moduledata['last_sequence'] = Module_news::where('id_menumodulelist', $moduleid)->max('sequence');
 		}
+		else if ($module['id_moduletype'] == 2)
+		{
+			$moduledata = Module_sendemail::where('id_menumodulelist', $moduleid)->get()->toArray();
+		} 
+		else
+			return back();
 
-		return back();
+		return view('backend.modules.admin_indexmodule', [
+			'menu' => $menu,
+			'module' => $module,
+			'moduletype' => $moduletype,
+			'moduledata' => $moduledata,
+		]);
+	}
+
+	public function admin_module_save(Request $request, $menuid, $moduleid, $type = false)
+	{
+
+		//dd($menuid, $moduleid, $type);
+
+		if (!$request->filled('moduletype'))
+			return back();
+
+	// NEWS MODULE
+		if ($request->filled('moduletype') == 'news')
+		{	
+			if ($type == 'new')
+			{
+				if (!$request->filled('new_title') || !$request->filled('new_message') || !$request->filled('new_date') || !$request->filled('new_link'))
+				{
+					if (Appservice::actual_language() == 'hu') $message = 'Hibás kitöltés!'; elseif (Appservice::actual_language() == 'en') $message = 'Incorrect filling!';
+						else $message = 'Error!';
+	
+					session()->flash('message', $message);
+	
+					return back();
+				}
+	
+				$newfilename = null;
+	
+				if ($request->hasFile('new_image'))
+				{
+					$file = $request->file('new_image');
+	
+					// Upload Image
+					$response = Appservice::image_operations($file, 600, 'storage_news');
+	
+					if (!$response['status'])
+					{
+						session()->flash('message', $response['message']);
+						return back();
+					}
+					else
+					{
+						$newfilename = $response['newfilename'];
+					}
+				}
+	
+				$new_newsrow = new Module_news();
+	
+				$sequence = intval($request->last_sequence) + 1;
+	
+				$new_newsrow->sequence = $sequence;
+				$new_newsrow->id_menumodulelist = $moduleid;
+				$new_newsrow->news_datetime = $request->new_date;
+				$new_newsrow->news_title = $request->new_title;
+				$new_newsrow->news_message = $request->new_message;
+				$new_newsrow->news_link = $request->new_link;
+				if ($newfilename)
+					$new_newsrow->news_image = $newfilename;
+	
+				$new_newsrow->save();
+	
+				return back();
+			} else if ($type == 'edit')
+			{
+				dd('NEWS EDIT');
+			}
+
+		// SEND EMAIL MODULE
+		} else if ($request->filled('moduletype') == 'sendemail')
+		{
+			dd('SENDEMAIL');
+			// ....
+		}
 	}
 
 	public function changelang(Request $request) {

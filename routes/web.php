@@ -16,6 +16,7 @@ Route::middleware(['web', 'auth'])->group(function() {
 	Route::post('/admin/menus/save', [BackendController::class, 'menus_save'])->name('menu_save');
 
 	Route::get('/admin/menus/module/{menuid}/{moduleid}', [BackendController::class, 'admin_module'])->name('admin_module');
+	Route::post('/admin/menus/module/{menuid}/{moduleid}/{type}', [BackendController::class, 'admin_module_save'])->name('admin_module_save');
 
 	Route::get('/admin/user', [BackendController::class, 'admin_user'])->name('admin_user');
 	Route::post('/admin/modify', [AuthenticationController::class, 'admin_modify_post'])->name('admin_modify_post');

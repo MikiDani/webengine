@@ -170,6 +170,33 @@ $(document).ready(function() {
 		});
 	}
 
+	// ADD NEW MODULE VALIDATE
+	if ($('#newmodule-form').length) {
+		$('#newmodule-form2').validate({					// !!!!!
+			rules: {
+				new_date: {
+					required: true,
+					date: true
+				},
+				new_title: {
+					required: true,
+					maxlength: 255
+				},
+				new_message: {
+					required: true,
+				},
+				new_link: {
+					// url: true,
+					required: true,
+					maxlength: 400
+				},
+				new_image: {
+					required: false
+				},
+			}
+		});
+	}
+
 	// VALIDATE MESSAGES
 	if (lang == 'hu') {
 		jQuery.extend(jQuery.validator.messages, {

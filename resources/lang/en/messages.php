@@ -139,4 +139,14 @@ return [
 		'textmustbesaved' => 'Must be saved',
 	],
 
+	'modules' => [
+		'textnewstitle' => 'Title',
+		'textnewsmessage' => 'Message',
+		'textnewsdatetime' => 'Datetime',
+		'textnewsimage' => 'Image',
+		'textnewslink' => 'URL link',
+		'textnewssubmit' => 'Add new news',
+		'texteditsubmit' => 'Save changes',
+	],
+
 ];

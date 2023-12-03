@@ -152,3 +152,27 @@
 	}
 	cursor: pointer;
 }
+
+.crumbmenu {
+	border-bottom: 1px solid $primary;
+	& a {
+		text-decoration: none;
+	}
+	& a:hover {
+		font-weight: bold;
+	}
+
+	& .crumbmenu-back-icon {
+		font-size: 1rem;
+	}
+	& .crumbmenu-back-icon:hover {
+		//font-size: 1.5rem;
+		& i {
+			color: $secondary !important;
+		}
+	}
+}
+
+.label-min-width {
+	min-width: 5rem;
+}
