@@ -55,22 +55,67 @@
 	color: black !important;
 }
 
-.menu-list-line-height {
-	//display: inline-block;
-	//line-height: 2.5rem !important;
+// .menu-list-line-height {
+// 	list-style-type: none;
+// }
+
+// .menu-list-line-min-width {
+// 	display: inline-block;
+// 	justify-content: center;
+// 	align-items: center;
+// 	min-width: 12rem !important;
+// 	height: 2.7rem;
+// }
+
+$top:0.7rem;
+$top2:0.8rem;
+$distance1: 0.4rem;
+$distance2: 0.95rem;
+$distance3: 1.2rem;
+
+.list-style-type-none {
 	list-style-type: none;
 }
 
-.menu-list-line-min-width {
-	display: inline-block;
-	justify-content: center;
-	align-items: center;
-	min-width: 12rem !important;
-	height: 2.7rem;
+.menulist-box {
+	width: 100%;
+	position: relative;
+	padding-left: calc(3 * #{$distance2}) !important;
+	padding-right: calc(2 * #{$distance2}) !important;
+}
+
+.menulist-i-position {
+	position: absolute;
+	top: $top;
+	left:$distance1;
+}
+
+.menulist-i-add {
+	position: absolute;
+	top: $top2;
+	left: calc(2 * #{$distance2});
+}
+
+.menulist-i-delete {
+	position: absolute;
+	top: $top2;
+	left: calc(3 * #{$distance3});
+}
+
+.menulist-i-select {
+	position: absolute;
+	top: $top;
+	right: calc(2 * #{$distance3});
+}
+
+.menulist-i-openclose {
+	position: absolute;
+	top: $top;
+	right:$distance1;
 }
 
 .form-menuname {
-	width: 30%;
+	width: 80%;
 	padding: 0.15rem;
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
@@ -91,15 +136,15 @@
 	}
 }
 
+.form-menulang {
+	width: 20%;
+}
+
 .text-bold {
 	font-weight: bold !important;
 }
 
 // menu list session
-
-.mt-05 {
-	margin-top: 0.15rem;
-}
 
 .bi-arrows-move {
 	&:hover {
@@ -108,6 +153,16 @@
 	}
 	&:active {
 		cursor: grabbing;
+	}
+}
+
+.bi-caret-down-fill, .bi-caret-up-fill {
+	&:hover {
+		cursor: pointer;
+		color: $warning;
+	}
+	&:active {
+		cursor: pointer;
 	}
 }
 
@@ -148,7 +203,6 @@
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='gold' class='bi bi-check2-circle' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'%3E%3C/path%3E%3Cpath d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'%3E%3C/path%3E%3C/svg%3E");
 	&:hover {
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='green' class='bi bi-check2-circle' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'%3E%3C/path%3E%3Cpath d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'%3E%3C/path%3E%3C/svg%3E");
-
 	}
 	cursor: pointer;
 }
@@ -159,14 +213,17 @@
 		text-decoration: none;
 	}
 	& a:hover {
-		font-weight: bold;
+		// font-weight: bold;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+  		text-underline-offset: 5px;
 	}
 
 	& .crumbmenu-back-icon {
 		font-size: 1rem;
 	}
 	& .crumbmenu-back-icon:hover {
-		//font-size: 1.5rem;
+		// font-size: 1.5rem;
 		& i {
 			color: $secondary !important;
 		}

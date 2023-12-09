@@ -229,7 +229,7 @@ class BackendController extends Controller
 		if ($module['id_moduletype'] == 1)
 		{
 			$moduledata = Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()->toArray();
-			$moduledata['last_sequence'] = Module_news::where('id_menumodulelist', $moduleid)->max('sequence');
+			$last_sequence = Module_news::where('id_menumodulelist', $moduleid)->max('sequence');
 		}
 		else if ($module['id_moduletype'] == 2)
 		{
@@ -243,6 +243,7 @@ class BackendController extends Controller
 			'module' => $module,
 			'moduletype' => $moduletype,
 			'moduledata' => $moduledata,
+			'last_sequence' => $last_sequence,
 		]);
 	}
 
@@ -290,12 +291,12 @@ class BackendController extends Controller
 				}
 	
 				$new_newsrow = new Module_news();
-	
+				
 				$sequence = intval($request->last_sequence) + 1;
 	
 				$new_newsrow->sequence = $sequence;
 				$new_newsrow->id_menumodulelist = $moduleid;
-				$new_newsrow->news_datetime = $request->new_date;
+				$new_newsrow->news_datetime = date('Y-m-d', strtotime($request->new_date));
 				$new_newsrow->news_title = $request->new_title;
 				$new_newsrow->news_message = $request->new_message;
 				$new_newsrow->news_link = $request->new_link;
@@ -305,9 +306,34 @@ class BackendController extends Controller
 				$new_newsrow->save();
 	
 				return back();
-			} else if ($type == 'edit')
+
+			} 
+			else if($type == 'edit')
 			{
-				dd('NEWS EDIT');
+				//dd($request->all()['edit']);
+				//dd($request->all(), $menuid, $moduleid);
+				
+				if(!empty($request->all()['edit']))
+				{
+					dump($request->all()['edit']);
+					$sequence = 1;
+					foreach($request->all()['edit'] as $id => $editrow)
+					{
+						$actual_newsrow = Module_news::find($id);
+
+						$actual_newsrow['sequence'] = $sequence;
+						$actual_newsrow['news_datetime'] = $editrow['date'];
+						$actual_newsrow['news_title'] = $editrow['title'];
+						$actual_newsrow['news_message'] = $editrow['message'];
+						$actual_newsrow['news_link'] = $editrow['link'];
+						
+						$actual_newsrow->save();
+
+						$sequence++;
+					}
+				}
+				
+				return back();
 			}
 
 		// SEND EMAIL MODULE

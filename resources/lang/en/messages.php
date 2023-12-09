@@ -140,13 +140,19 @@ return [
 	],
 
 	'modules' => [
-		'textnewstitle' => 'Title',
-		'textnewsmessage' => 'Message',
-		'textnewsdatetime' => 'Datetime',
-		'textnewsimage' => 'Image',
-		'textnewslink' => 'URL link',
-		'textnewssubmit' => 'Add new news',
-		'texteditsubmit' => 'Save changes',
+		'news' => [
+			'textaddnewnews' => 'Insert new news row',
+			'textnewstitle' => 'Title',
+			'textnewsmessage' => 'Message',
+			'textnewsdatetime' => 'Datetime',
+			'textnewsimage' => 'Image',
+			'textnewslink' => 'URL link',
+			'textnewssubmit' => 'Add new news',
+			'texteditsubmit' => 'Save changes',
+			'textallopen' => 'All open',
+			'textallclose' => 'All close',
+			'texteditnewsdeletemessage' => 'Are you sure you want to delete the message?',
+			'textemptymessage' => `You deleted everything. Don't forget to save it.`,
+		],
 	],
-
 ];

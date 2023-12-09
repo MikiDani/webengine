@@ -172,7 +172,7 @@ $(document).ready(function() {
 
 	// ADD NEW MODULE VALIDATE
 	if ($('#newmodule-form').length) {
-		$('#newmodule-form2').validate({					// !!!!!
+		$('#newmodule-form').validate({
 			rules: {
 				new_date: {
 					required: true,
@@ -367,7 +367,6 @@ $(document).ready(function() {
 				let thisId = $(this).attr('data-modulelist-id')
 				if (thisId >= dataMaxId)	{
 					$("#menu-module-box").attr('data-menumodulelist-maxid', thisId)
-					console.log('menumodulelist maxid: ' + $("#menu-module-box").attr('data-menumodulelist-maxid'))
 				}
 			})
 			let actualMaxId = parseInt($("#menu-module-box").attr('data-menumodulelist-maxid')) + 1
@@ -408,7 +407,6 @@ $(document).ready(function() {
 			if (question == true) {
 				let thisId = element.attr('data-modulelist-id')
 				$(`#menumodulelist_${thisId}`).remove()
-				console.log("Felhasználó megerősítette.")
 			}
 		}
 		$(".minus-button-module").on('click', function () {
@@ -440,19 +438,12 @@ $(document).ready(function() {
 
 		// SELECT
 		var selectAction = function(clone) {
-			
-			
 			menuModuleListMaxIdCounter()
 			$("#new_menumodule").show()
-
 			let thisLi = clone.closest('.menu-sortable')
 			var thisId = thisLi.attr('data-id')
 			myVar.selectedModuleId = thisId
-
 			$("#id_menulist").val(thisId)
-
-			console.log(myVar.selectedModuleId)
-
 			$("div[class^='modulerow_']").each(function() {
 				$("#menu-module-label").text('This menu element ID: ' + thisId)
 				if (thisId == $(this).attr('data-id')) { $(this).show() } else { $(this).hide() }
@@ -460,7 +451,7 @@ $(document).ready(function() {
 		}
 		$("#menu-box").find("i[id^='select_']").on('click', function() {
 			$("#menu-box").find(".selected-menuelement-bg").removeClass("selected-menuelement-bg")
-			$(this).closest('.menu-list-line-min-width').addClass('selected-menuelement-bg')
+			$(this).closest('.menulist-box').addClass('selected-menuelement-bg')
 			var clone = $(this)
 			selectAction(clone)
 		});
@@ -630,5 +621,92 @@ $(document).ready(function() {
 			}
 		});
     }
+	/////////////////
+	// NEWS MODULE //
+	/////////////////
+	if ($('#news-box').length) {
+		$('#collapseButton').click(function(){
+			$('.collapse-icon i').toggleClass('bi-chevron-bar-down bi-chevron-bar-up');
+		});
+
+		// ARANGEMENT NEWS MODULE ELEMENTS
+		var newsModuleElements = function () {
+			$("#news-all").sortable({
+				connectWith: ".editNewsSortable"
+			}).disableSelection();
+		}
+		newsModuleElements() // first load
+
+		$('#newmodule-form, #editmodule-form').on('keypress', 'input', function(event) {
+			if (event.which === 13) {
+				event.preventDefault();
+				$(this).blur();
+				return false;
+			}
+		});
+
+		$(".openclose-arrows-pos").on('click', function(){
+			let thisId = $(this).attr('data-id');
+			if ($(`#newsrow-content_${thisId}`).css('display') === 'none') {
+				$(this).find('i').removeClass('bi-caret-down-fill')
+				$(this).find('i').addClass('bi-caret-up-fill')
+				$(`#newsrow-content_${thisId}`).show(100);
+			} else {
+				$(this).find('i').removeClass('bi-caret-up-fill')
+				$(this).find('i').addClass('bi-caret-down-fill')
+				$(`#newsrow-content_${thisId}`).hide(100)
+			}
+		});
+		
+		$(".delete-arrows-pos").on('click', function(){
+			let question = confirm(texteditnewsdeletemessage);
+			if (question == true) {
+				let thisId = $(this).attr('data-id');
+				$(`.editNewsSortable_${thisId}`).remove()
+
+				if ($('#news-all').find('.editNewsSortable').length == 0) {
+					$('#news-all').append('<div class="mt-2 m-0 p-2 bg-success text-white fw-bold rounded">' + textemptymessage + '</div>')
+				}
+			}
+		});
+
+		var colorizer = function (element, value, originalColor, warningColor, time) {
+			element.css('color', warningColor)
+
+			element.text(value)
+			const myTimeout = setTimeout(function() {
+				element.css('color', originalColor)
+			}, time);
+
+			function myStopFunction() {
+			clearTimeout(myTimeout);
+			}
+		}
+
+		$("input[name$='[date]']").on('change', function() {
+			let thisId = $(this).attr('data-id')
+			let value = $(this).val()
+			colorizer($(`#newsrow-head_${thisId}`).find('.newsrow-datetime'), value, 'white', 'yellow', 1000)
+			
+		});
+
+		$("input[name$='[title]']").on('keyup', function() {
+			let thisId = $(this).attr('data-id')
+			let value = $(this).val()
+			colorizer($(`#newsrow-head_${thisId}`).find('.newsrow-title'), value, 'white', 'yellow', 1000)
+		});
+
+		$(".allopen").on('click', function(){
+			$('.newsrow-content').show(100);
+			$(".openclose-arrows-pos").find('i').removeClass('bi-caret-down-fill bi-caret-up-fill')
+			$(".openclose-arrows-pos").find('i').addClass('bi-caret-up-fill')
+		});
+
+		$(".allclose").on('click', function(){
+			$('.newsrow-content').hide(100);
+			$(".openclose-arrows-pos").find('i').removeClass('bi-caret-down-fill bi-caret-up-fill')
+			$(".openclose-arrows-pos").find('i').addClass('bi-caret-down-fill')
+		});
+	}
 
 })

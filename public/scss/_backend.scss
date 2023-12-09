@@ -1,8 +1,11 @@
 body {
 	background-image: url('/img/bgpuzzle1.png');
 	background-color: white !important;
-	background-size: cover;
-  	background-position: center center;
+	background-attachment: fixed;
+  	background-position: center;
+  	width: 100%;
+	//background-size: cover;
+  	//background-position: center center;
 }
 
 .login-box {
@@ -113,4 +116,27 @@ input + label.error {
 
 .bg-selectmodulebutton {
 	background-color: $selected !important;
+}
+
+.news-label-pos {
+	position: relative;
+	padding-left: 2rem !important;
+	padding-right: 2rem !important;
+}
+
+.move-arrows-pos {
+	position: absolute;
+	left: 0.5rem;
+	top: 0.4rem;
+}
+
+.openclose-arrows-pos {
+	position: absolute;
+	right: 0.5rem;
+	top: 0.4rem;
+}
+.delete-arrows-pos {
+	position: absolute;
+	right: 8rem;
+	top: 0.4rem;
 }

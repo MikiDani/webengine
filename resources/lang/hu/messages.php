@@ -140,13 +140,19 @@ return [
 	],
 
 	'modules' => [
-		'textnewstitle' => 'Cím',
-		'textnewsmessage' => 'Szöveg',
-		'textnewsdatetime' => 'Dátum',
-		'textnewsimage' => 'Kép',
-		'textnewslink' => 'URL link',
-		'textnewssubmit' => 'Új hír hozzáadása',
-		'texteditsubmit' => 'Módosítások mentése',
+		'news' => [
+			'textaddnewnews' => 'Új hír hozzáadása',
+			'textnewstitle' => 'Cím',
+			'textnewsmessage' => 'Szöveg',
+			'textnewsdatetime' => 'Dátum',
+			'textnewsimage' => 'Kép',
+			'textnewslink' => 'URL link',
+			'textnewssubmit' => 'Új hír hozzáadása',
+			'texteditsubmit' => 'Módosítások mentése',
+			'textallopen' => 'Összes kinyit',
+			'textallclose' => 'Összes bezár',
+			'texteditnewsdeletemessage' => 'Biztos törlöd a hírt?',
+			'textemptymessage' => 'Kitöröltél mindent. Ne felejts el rámenteni.',
+		],
 	],
-
 ];
