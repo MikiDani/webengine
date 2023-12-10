@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Services\Appservice;
 use App\Models\Menumoduletype;
@@ -81,6 +82,15 @@ class BackendController extends Controller
 
 	public function menus_save(Request $request)
 	{
+		if (Auth::user()->rank !== 1)
+		{
+			if (Appservice::actual_language() == 'hu') $message = 'Nincsen jogod a művelethez.'; elseif (Appservice::actual_language() == 'en') $message = `You don't have permission to do this.`;
+				else $message = 'Error!';
+	
+			session()->flash('message', $message);
+			return back();
+		}
+
 		// MENU & MENULIST SAVE
 		$menu = json_decode($request->menuarray);
 
@@ -211,13 +221,21 @@ class BackendController extends Controller
 		}
 	}
 
-	public function admin_module($menuid = null, $moduleid = null)
+	public function admin_module($menuid = null, $moduleid = null, $rowid = null)
 	{
 		if ($menuid == null || $moduleid == null)
 			return redirect()->route('admin_menus');
 		
-		$menu = Menulist::where('id', $menuid)->first()->toArray();
+		if (!Menulist::where('id', $menuid)->first())
+			return redirect()->route('admin_index');
+		else
+			$menu = Menulist::where('id', $menuid)->first()->toArray();
+
 		$module = Menumodulelist::where('id', $moduleid)->where('id_menulist', $menuid)->first();
+
+		if (!isset($module->id_moduletype))
+			return redirect()->route('admin_menus', ['menulistid' =>$menuid]);
+
 		$moduletype = Menumoduletype::find($module->id_moduletype)->toArray();
 		
 		if ($module == null)
@@ -241,6 +259,7 @@ class BackendController extends Controller
 		return view('backend.modules.admin_indexmodule', [
 			'menu' => $menu,
 			'module' => $module,
+			'rowid' => $rowid,
 			'moduletype' => $moduletype,
 			'moduledata' => $moduledata,
 			'last_sequence' => $last_sequence,
@@ -249,15 +268,26 @@ class BackendController extends Controller
 
 	public function admin_module_save(Request $request, $menuid, $moduleid, $type = false)
 	{
-
-		//dd($menuid, $moduleid, $type);
-
+		if (Auth::user()->rank !== 1)
+		{
+			if (Appservice::actual_language() == 'hu') $message = 'Nincsen jogod a művelethez.'; elseif (Appservice::actual_language() == 'en') $message = `You don't have permission to do this.`;
+				else $message = 'Error!';
+	
+			session()->flash('message', $message);
+			return back();
+		}
+		
 		if (!$request->filled('moduletype'))
 			return back();
 
-	// NEWS MODULE
+		$rowid = ($request->filled('rowid')) ? $request->rowid : null;
+		
+		// NEWS MODULE
 		if ($request->filled('moduletype') == 'news')
 		{	
+			$uploadimagesize = 600;
+			$uploadimagepath = 'storage_news';
+
 			if ($type == 'new')
 			{
 				if (!$request->filled('new_title') || !$request->filled('new_message') || !$request->filled('new_date') || !$request->filled('new_link'))
@@ -271,13 +301,14 @@ class BackendController extends Controller
 				}
 	
 				$newfilename = null;
-	
+
+				// IMAGE SAVE
 				if ($request->hasFile('new_image'))
 				{
 					$file = $request->file('new_image');
 	
 					// Upload Image
-					$response = Appservice::image_operations($file, 600, 'storage_news');
+					$response = Appservice::image_operations($file, $uploadimagesize, $uploadimagepath);
 	
 					if (!$response['status'])
 					{
@@ -304,21 +335,26 @@ class BackendController extends Controller
 					$new_newsrow->news_image = $newfilename;
 	
 				$new_newsrow->save();
-	
-				return back();
-
+				
+				return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
 			} 
 			else if($type == 'edit')
 			{
-				//dd($request->all()['edit']);
 				//dd($request->all(), $menuid, $moduleid);
 				
 				if(!empty($request->all()['edit']))
 				{
-					dump($request->all()['edit']);
 					$sequence = 1;
 					foreach($request->all()['edit'] as $id => $editrow)
 					{
+						$response = [
+							'status' => false,
+							'newfilename' => false,
+						];
+
+						if(isset($editrow['image']))
+							$response = Appservice::image_operations($editrow['image'], $uploadimagesize, $uploadimagepath);
+
 						$actual_newsrow = Module_news::find($id);
 
 						$actual_newsrow['sequence'] = $sequence;
@@ -326,22 +362,79 @@ class BackendController extends Controller
 						$actual_newsrow['news_title'] = $editrow['title'];
 						$actual_newsrow['news_message'] = $editrow['message'];
 						$actual_newsrow['news_link'] = $editrow['link'];
-						
+
+						if($response['status'])
+							$actual_newsrow['news_image'] = $response['newfilename'];
+
 						$actual_newsrow->save();
 
 						$sequence++;
 					}
 				}
 				
-				return back();
+				return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
 			}
 
 		// SEND EMAIL MODULE
-		} else if ($request->filled('moduletype') == 'sendemail')
+		}
+		else if ($request->filled('moduletype') == 'sendemail')
 		{
 			dd('SENDEMAIL');
 			// ....
 		}
+	}
+
+	public function delpic($menuid, $moduleid, $type, $rowid) {
+		if (Auth::user()->rank !== 1)
+		{
+			if (Appservice::actual_language() == 'hu') $message = 'Nincsen jogod a művelethez.'; elseif (Appservice::actual_language() == 'en') $message = `You don't have permission to do this.`;
+				else $message = 'Error!';
+	
+			session()->flash('message', $message);
+			return back();
+		}
+
+		if ($type == null || !MenuList::find($menuid)->exists() || !Menumodulelist::find($moduleid)->exists() || Menumodulelist::where('id', $moduleid)->first()->id_menulist != $menuid)
+			return back();
+
+		if($type == 'news')
+		{
+			if (Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->exists())
+			{
+				$row = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
+
+				if (Storage::disk('public')->exists('storage_'.$type.'/'.$row->news_image))
+				{
+					// Delete image
+					Storage::disk('public')->delete('storage_'.$type.'/'.$row->news_image);
+
+					$row->news_image = null;
+					$row->save();
+
+					if (Appservice::actual_language() == 'hu') $message = 'Sikeres képtörlés.'; elseif (Appservice::actual_language() == 'en') $message = `Image deleted successfully.`;
+					else $message = 'Successfully!';
+		
+					session()->flash('message', $message);
+					return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
+				}
+				else
+				{	
+					$row = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
+					$row->news_image = null;
+					$row->save();
+
+					if (Appservice::actual_language() == 'hu') $message = 'Hiba a kép törlésekor.'; elseif (Appservice::actual_language() == 'en') $message = `Error deleting image.`;
+					else $message = 'Error!';
+		
+					session()->flash('message', $message);
+					return redirect()->route('admin_module', ['menuid' =>  $menuid, 'moduleid' => $moduleid]);
+				}
+			}
+			else 
+				return back();
+		}
+
+		return back();
 	}
 
 	public function changelang(Request $request) {

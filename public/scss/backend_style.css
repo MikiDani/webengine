@@ -11600,6 +11600,141 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+body {
+  background-image: url("/img/bgpuzzle1.png");
+  background-color: white !important;
+  background-attachment: fixed;
+  background-position: center;
+  width: 100%;
+}
+
+.login-box {
+  box-shadow: 10px 10px 12px rgba(0, 0, 0, 0.4666666667);
+}
+
+.backend-menu-text > ul {
+  align-items: center;
+  text-align: center;
+}
+
+.backend-menu-text > ul > li {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.backend-menu-text > ul > li > a {
+  display: inline-block;
+  text-align: center;
+  color: #191919 !important;
+  margin-left: 0.7rem;
+  margin-right: 0.7rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+.backend-menu-text > ul > li > a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.5rem;
+  text-decoration-thickness: 3px;
+  text-decoration-color: #1fb71f !important;
+  -moz-text-decoration-color: #1fb71f !important;
+}
+
+.custom-toggler {
+  border: none;
+  padding: 0.5rem;
+  background-color: gold;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+.custom-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.admin-login-logo {
+  width: 4rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.admin-menu-logo {
+  width: 3rem;
+}
+
+input + label.error {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: #5cf45c;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+
+.error-style {
+  text-align: center;
+  color: red;
+}
+
+#selectlang {
+  min-width: 4rem;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+.pos-module-arrow {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+}
+
+.pos-module-delete {
+  position: absolute;
+  right: 0;
+  top: 3px;
+}
+
+.text-small {
+  font-size: 0.7rem !important;
+}
+
+.selected-menuelement-bg {
+  background-color: #0ee8ec !important;
+}
+
+.bg-selectmodulebutton {
+  background-color: #0ee8ec !important;
+}
+
+.news-label-pos {
+  position: relative;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+
+.move-arrows-pos {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.4rem;
+}
+
+.openclose-arrows-pos {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.4rem;
+}
+
+.delete-arrows-pos {
+  position: absolute;
+  right: 8rem;
+  top: 0.4rem;
+}
+
 .link-1 {
   cursor: pointer;
 }
@@ -11804,6 +11939,18 @@ textarea.form-control-lg {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='red' class='bi bi-x-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z'%3E%3C/path%3E%3C/svg%3E");
 }
 
+.delete-button-pic {
+  width: 24px;
+  height: 24px;
+  color: #1fb71f;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='red' class='bi bi-x-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z'%3E%3C/path%3E%3C/svg%3E");
+  cursor: pointer;
+}
+.delete-button-pic:hover {
+  transform: scale(1.5);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='red' class='bi bi-x-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z'%3E%3C/path%3E%3C/svg%3E");
+}
+
 .select-button {
   width: 16px;
   height: 16px;
@@ -11837,139 +11984,14 @@ textarea.form-control-lg {
   min-width: 5rem;
 }
 
-body {
-  background-image: url("/img/bgpuzzle1.png");
-  background-color: white !important;
-  background-attachment: fixed;
-  background-position: center;
-  width: 100%;
-}
-
-.login-box {
-  box-shadow: 10px 10px 12px rgba(0, 0, 0, 0.4666666667);
-}
-
-.backend-menu-text > ul {
-  align-items: center;
-  text-align: center;
-}
-
-.backend-menu-text > ul > li {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-.backend-menu-text > ul > li > a {
-  display: inline-block;
-  text-align: center;
-  color: #191919 !important;
-  margin-left: 0.7rem;
-  margin-right: 0.7rem;
-  text-decoration: none;
-  font-weight: bold;
-}
-.backend-menu-text > ul > li > a:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.5rem;
-  text-decoration-thickness: 3px;
-  text-decoration-color: #1fb71f !important;
-  -moz-text-decoration-color: #1fb71f !important;
-}
-
-.custom-toggler {
-  border: none;
-  padding: 0.5rem;
-  background-color: gold;
-  border-radius: 0.5rem;
-  -webkit-border-radius: 0.5rem;
-  -moz-border-radius: 0.5rem;
-  -ms-border-radius: 0.5rem;
-  -o-border-radius: 0.5rem;
-}
-.custom-toggler:focus {
-  box-shadow: none;
-  outline: none;
-}
-
-.admin-login-logo {
-  width: 4rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
-.admin-menu-logo {
-  width: 3rem;
-}
-
-input + label.error {
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  background-color: #5cf45c;
-  border-radius: 0.5rem;
-  -webkit-border-radius: 0.5rem;
-  -moz-border-radius: 0.5rem;
-  -ms-border-radius: 0.5rem;
-  -o-border-radius: 0.5rem;
-}
-
-.error-style {
-  text-align: center;
-  color: red;
-}
-
-#selectlang {
-  min-width: 4rem;
-}
-
-.pos-relative {
+.pic-frame {
   position: relative;
 }
 
-.pos-module-arrow {
+.pic-del-pos {
   position: absolute;
-  left: 3px;
-  top: 3px;
-}
-
-.pos-module-delete {
-  position: absolute;
-  right: 0;
-  top: 3px;
-}
-
-.text-small {
-  font-size: 0.7rem !important;
-}
-
-.selected-menuelement-bg {
-  background-color: #0ee8ec !important;
-}
-
-.bg-selectmodulebutton {
-  background-color: #0ee8ec !important;
-}
-
-.news-label-pos {
-  position: relative;
-  padding-left: 2rem !important;
-  padding-right: 2rem !important;
-}
-
-.move-arrows-pos {
-  position: absolute;
-  left: 0.5rem;
-  top: 0.4rem;
-}
-
-.openclose-arrows-pos {
-  position: absolute;
-  right: 0.5rem;
-  top: 0.4rem;
-}
-
-.delete-arrows-pos {
-  position: absolute;
-  right: 8rem;
-  top: 0.4rem;
+  left: 0.2rem;
+  top: 0.05rem;
 }
 
 .full-win {

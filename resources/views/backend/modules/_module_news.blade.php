@@ -21,6 +21,7 @@
         {{-- NEW --}}
         <form id="newmodule-form" method="post" action="{{ route("admin_module_save", ['menuid' => $menu['id'], 'moduleid' => $module['id'], 'type' => 'new' ]) }}" class="p-3 m-0 bg-primary rounded-bottom" enctype="multipart/form-data" novalidate>
             @csrf
+            <input type="hidden" name="rowid">
             <input type="hidden" name="moduletype" value="news">
             <input type="hidden" name="last_sequence" value="@isset($last_sequence){{ $last_sequence }} @else 0 @endisset">
             <div class="row p-0 m-0">
@@ -81,6 +82,7 @@
     {{-- EDIT --}}
     <form id="editmodule-form" method="post" action="{{ route("admin_module_save", ['menuid' => $menu['id'], 'moduleid' => $module['id'], 'type' => 'edit' ]) }}" class="p-0 m-0 mt-2 bg-light rounded" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="moduletype" value="news">
+        <input type="hidden" name="rowid">
 
         @yield('controller-box')
 
@@ -101,7 +103,8 @@
                         <div class="newsrow-title d-inline">{{ $row['news_title'] }}</div> <div class="newsrow-datetime d-inline">{{ \Carbon\Carbon::parse($row['news_datetime'])->format('Y-m-d') }}</div>
                     </div>
                     {{-- content --}}
-                    <div id="newsrow-content_{{ $row['id'] }}" class="newsrow-content row m-0 p-3 mb-2 bg-light border border-2 border-top-0 rounded-bottom" style="display:none;">
+                    @php if(isset($rowid) && $rowid == $row['id']) $displayvalue = 'block'; else $displayvalue = 'none'; @endphp
+                    <div id="newsrow-content_{{ $row['id'] }}" class="newsrow-content row m-0 p-3 mb-2 bg-light border border-2 border-top-0 rounded-bottom" style="display:{{ $displayvalue }};">
                         <div class="content-left p-0 m-0 col-12 col-lg-6">
                             <div class="row p-0 m-0 my-2">
                                 <p class="p-0 m-0">
@@ -133,19 +136,29 @@
                                     </div>
                                 </p>
                             </div>
+                            {{-- IMAGE --}}
                             <div class="row p-0 m-0 my-2">
                                 @if($row['news_image'])
-                                    <img src="{{ Storage::url('public/storage_news/' . $row['news_image']) }}" alt="{{ $row['news_title'] }}">
+                                    <div class="pic-frame p-0 m-0 pe-0 pe-lg-3">
+                                        <div class="pic-del-pos" data-id="{{ $row['id'] }}">
+                                            <a href="{{ route('delpic', ['menuid' => $menu['id'], 'moduleid' => $module['id'], "type" => $moduletype['name'], "rowid" => $row['id']]) }}" class="p-0 m-0">
+                                                <i class="delete-button-pic d-inline-block align-middle"></i>
+                                            </a>
+                                        </div>
+                                        @if(Storage::disk('public')->exists('storage_news/'.$row['news_image']))
+                                            <img src="{{ Storage::url('public/storage_news/'.$row['news_image']) }}" alt="{{ $row['news_title'] }}" title="{{ $row['news_title'] }}" class="w-100">
+                                        @else
+                                            <img src="/img/nopic.png" alt="nopic" title="nopic" class="w-100">
+                                        @endif
+                                    </div>
                                 @else
                                     <p class="p-0 m-0">
                                         <div class="p-0 m-0 col-auto label-min-width align-self-center">
                                             <label>{{ __('messages.modules.news.textnewsimage') }}</label>
                                         </div>
-                                        @if(true)
-                                            <div class="col">
-                                                <input type="file" name="edit[{{ $row['id'] }}][image]" class="form-control">
-                                            </div>
-                                        @endif
+                                        <div class="col">
+                                            <input type="file" name="edit[{{ $row['id'] }}][image]" class="form-control">
+                                        </div>
                                     </p>
                                 @endif
                             </div>
@@ -167,6 +180,11 @@
         @endif
     </form>
 </div>
+@isset($rowid)
+<script>
+    var rowId = "{{ $rowid }}"
+</script>
+@endisset
 <script>
     var texteditnewsdeletemessage = "{{ __('messages.modules.news.texteditnewsdeletemessage') }}"
     var textemptymessage = "{{ __('messages.modules.news.textemptymessage') }}"

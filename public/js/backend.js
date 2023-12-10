@@ -625,6 +625,10 @@ $(document).ready(function() {
 	// NEWS MODULE //
 	/////////////////
 	if ($('#news-box').length) {
+
+		// Scroll jump
+		if (typeof rowId !== 'undefined' && $(`#newsrow-head_${rowId}`).length > 0) document.getElementById(`newsrow-head_${rowId}`).scrollIntoView();
+
 		$('#collapseButton').click(function(){
 			$('.collapse-icon i').toggleClass('bi-chevron-bar-down bi-chevron-bar-up');
 		});
@@ -645,20 +649,22 @@ $(document).ready(function() {
 			}
 		});
 
-		$(".openclose-arrows-pos").on('click', function(){
+		$(".openclose-arrows-pos").on('click', function() {
 			let thisId = $(this).attr('data-id');
 			if ($(`#newsrow-content_${thisId}`).css('display') === 'none') {
 				$(this).find('i').removeClass('bi-caret-down-fill')
 				$(this).find('i').addClass('bi-caret-up-fill')
-				$(`#newsrow-content_${thisId}`).show(100);
+				$(`#newsrow-content_${thisId}`).show(100)
+				$("input[name='rowid']").val(thisId)
 			} else {
 				$(this).find('i').removeClass('bi-caret-up-fill')
 				$(this).find('i').addClass('bi-caret-down-fill')
 				$(`#newsrow-content_${thisId}`).hide(100)
+				$("input[name='rowid']").val(null)
 			}
 		});
 		
-		$(".delete-arrows-pos").on('click', function(){
+		$(".delete-arrows-pos").on('click', function() {
 			let question = confirm(texteditnewsdeletemessage);
 			if (question == true) {
 				let thisId = $(this).attr('data-id');

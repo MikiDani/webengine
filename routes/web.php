@@ -15,13 +15,16 @@ Route::middleware(['web', 'auth'])->group(function() {
 	Route::get('/admin/menus/{menulistid?}', [BackendController::class, 'admin_menus'])->name('admin_menus');
 	Route::post('/admin/menus/save', [BackendController::class, 'menus_save'])->name('menu_save');
 
-	Route::get('/admin/menus/module/{menuid}/{moduleid}', [BackendController::class, 'admin_module'])->name('admin_module');
+	Route::get('/admin/menus/module/{menuid}/{moduleid}/{rowid?}', [BackendController::class, 'admin_module'])->name('admin_module');
 	Route::post('/admin/menus/module/{menuid}/{moduleid}/{type}', [BackendController::class, 'admin_module_save'])->name('admin_module_save');
-
+	
 	Route::get('/admin/user', [BackendController::class, 'admin_user'])->name('admin_user');
 	Route::post('/admin/modify', [AuthenticationController::class, 'admin_modify_post'])->name('admin_modify_post');
 	Route::get('/admin/logout', [AuthenticationController::class, 'admin_logout'])->name('admin_logout');
 	Route::post('/admin/unsubscribe',  [AuthenticationController::class,'admin_unsubscribe'])->name('admin_unsubscribe');
+
+	// delete picture
+	Route::get('/admin/menus/module/{menuid}/{moduleid}/{type}/{rowid}', [BackendController::class, 'delpic'])->name('delpic');
 });
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
