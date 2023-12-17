@@ -129,6 +129,9 @@ return [
 	// Page Menu List
 
 	'pagemenulist' => [
+		'textaddnewrootmenu' => 'Add new Menu Element',
+		'textsaveallchanges' => 'Save All Changes',
+		'textselectedmodule' => 'List of menu modules',
 		'textmenujsonisempty' => 'The menu is now empty.',
 		'textselectedelementlabel' => 'Element not selected.',
 		'textmoduletypelabel' => 'Module type:',

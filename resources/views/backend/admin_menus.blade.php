@@ -11,17 +11,19 @@
 		<input id="menuarray" type="hidden" name="menuarray" value="javacript">
 		<div class="row card mt-3 mx-auto">
 			@if(session('message'))
-				<div class="p-3 bg-info rounded">
-					<h6>{{ session('message') }}</h6>
+				<div class="p-3 m-0 text-center">
+					<i class="bi bi-chat-right-dots me-3"></i><span>{{ session('message') }}</span>
 				</div>
 			@endif
 			<div class="row p-0 m-0 menu-head bg-success rounded-top p-2">
 				<div class="col-12 col-lg-3 p-0 m-0 me-lg-2">
-					<button id="new-root-menu" type="button" class="form-control form-control-sm border-0 d-inline bg-primary">Add new root menu</button>
+					<button id="new-root-menu" type="button" class="form-control form-control-sm border-0 d-inline bg-primary">
+						{{ __('messages.pagemenulist.textaddnewrootmenu') }}
+					</button>
 				</div>
 				<div class="col-12 col-lg-3 p-0 m-0 me-lg-2 mt-2 mt-lg-0">
 					<button id="save-menu" class="form-control form-control-sm border-0 d-inline bg-warning">
-						Saving All Changes
+						{{ __('messages.pagemenulist.textsaveallchanges') }}
 						<i class="bi bi-exclamation-diamond"></i>
 					</button>
 				</div>
@@ -39,7 +41,7 @@
 					</ul>
 				</div>
 				<div id="menu-module-box" data-menumodulelist-maxid="0" class="col-12 col-md-4 p-0 m-0 p-2 pt-0 p-lg-2 mt-1 bg-light rounded">
-					<div id="menu-module-label" class="p-0 m-0 p-2 ps-3 mb-2 bg-success text-white rounded d-flex align-items-center text-bold">{{ __('messages.pagemenulist.textselectedelementlabel') }}</div>
+					<div id="menu-module-label" class="p-0 m-0 ps-3 mb-2 label-minh bg-success text-white rounded text-bold text-center">{{ __('messages.pagemenulist.textselectedelementlabel') }}</div>
 					@if($menumodulelist)
 						@foreach($menumodulelist as $menurowid => $menurowvalue)
 							<div class="modulerow_{{ $menurowid }} p-0 m-0" data-id="{{ $menurowid }}" style="display:none;">
@@ -105,6 +107,7 @@
 	</form>
 	<script>
 		var page_menulistid = "{{ $menulistid }}"
+		var textselectedmodule = "{{ __('messages.pagemenulist.textselectedmodule') }}"
 		var textmoduletypelabel = "{{ __('messages.pagemenulist.textmoduletypelabel') }}"
 		var textmoduledeletealert = "{{ __('messages.pagemenulist.textmoduledeletealert') }}"
 		var textselectedelementlabel = "{{ __('messages.pagemenulist.textselectedelementlabel') }}"

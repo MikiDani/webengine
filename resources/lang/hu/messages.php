@@ -129,6 +129,9 @@ return [
 	// Page Menu List
 
 	'pagemenulist' => [
+		'textaddnewrootmenu' => 'Új menuelem hozzáadása',
+		'textsaveallchanges' => 'Minden változtatás mentése',
+		'textselectedmodule' => 'Menü modul lista',
 		'textmenujsonisempty' => 'A menü jelenleg üres.',
 		'textselectedelementlabel' => 'Nincsen kiválasztva menü.',
 		'textmoduletypelabel' => 'Modul típus:',

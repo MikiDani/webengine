@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use app\Models\Module_switch;
 
 class Menumodulelist extends Model
 {
@@ -12,6 +11,6 @@ class Menumodulelist extends Model
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'sequence', 'modulename_hu', 'modulename_en', 'id_menulist', 'id_moduletype',
+		'id_menulist', 'id_moduletype', 'sequence', 'modulename_hu', 'modulename_en',
 	];
 }

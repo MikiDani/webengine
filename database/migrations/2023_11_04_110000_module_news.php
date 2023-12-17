@@ -17,7 +17,7 @@ return new class extends Migration
             $table->datetime('news_datetime');
             $table->string('news_title');
             $table->longText('news_message');
-            $table->string('news_image')->nullable();
+            $table->integer('image_id')->nullable();
             $table->string('news_link');
 
             $table->timestamps();

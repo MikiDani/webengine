@@ -1,7 +1,10 @@
 @section('controller-box')
     <div class="controller-box row p-0 m-0">
         <div class="col-12 col-lg-6 p-0 m-0 mb-2 mb-lg-0 pe-0 pe-lg-2">
-            <button type="submit" class="btn btn-warning btn-sm w-100">{{ __('messages.modules.news.texteditsubmit') }}</button>
+            <button type="submit" class="btn btn-warning btn-sm w-100">
+                {{ __('messages.modules.news.texteditsubmit') }}
+                <i class="bi bi-exclamation-diamond"></i>
+            </button>
         </div>
         <div class="row col-12 col-lg-6 p-0 m-0">
             <div class="allopen p-0 m-0 pe-2 col-6"><button type="button" class="btn btn-secondary btn-sm w-100">{{ __('messages.modules.news.textallopen') }}</button></div>
@@ -21,7 +24,7 @@
         {{-- NEW --}}
         <form id="newmodule-form" method="post" action="{{ route("admin_module_save", ['menuid' => $menu['id'], 'moduleid' => $module['id'], 'type' => 'new' ]) }}" class="p-3 m-0 bg-primary rounded-bottom" enctype="multipart/form-data" novalidate>
             @csrf
-            <input type="hidden" name="rowid">
+            <input type="hidden" name="rowid" @isset($rowid) value="{{ $rowid }}" @else value="0" @endisset>
             <input type="hidden" name="moduletype" value="news">
             <input type="hidden" name="last_sequence" value="@isset($last_sequence){{ $last_sequence }} @else 0 @endisset">
             <div class="row p-0 m-0">
@@ -82,15 +85,15 @@
     {{-- EDIT --}}
     <form id="editmodule-form" method="post" action="{{ route("admin_module_save", ['menuid' => $menu['id'], 'moduleid' => $module['id'], 'type' => 'edit' ]) }}" class="p-0 m-0 mt-2 bg-light rounded" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="moduletype" value="news">
-        <input type="hidden" name="rowid">
 
         @yield('controller-box')
 
         <div id="news-all" class="p-0 m-0 mb-2">
             @foreach($moduledata as $row)
+                <input type="hidden" name="rowid" value="{{ $row['id'] }}">
                 <div class="editNewsSortable editNewsSortable_{{ $row['id'] }} p-0 m-0">
                     {{-- head --}}
-                    <div id="newsrow-head_{{ $row['id'] }}" data-id="{{ $row['id'] }}" class="news-label-pos d-flex justify-content-between align-items-center mt-2 m-0 p-2 bg-success text-white fw-bold rounded-top">
+                    <div id="newsrow-head_{{ $row['id'] }}" data-id="{{ $row['id'] }}" class="news-label-click news-label-pos d-flex justify-content-between align-items-center mt-2 m-0 p-2 bg-success text-white fw-bold rounded-top">
                         <div class="move-arrows-pos">
                             <i class="bi bi-arrows-move d-inline-block align-middle"></i>
                         </div>
@@ -138,15 +141,18 @@
                             </div>
                             {{-- IMAGE --}}
                             <div class="row p-0 m-0 my-2">
-                                @if($row['news_image'])
+                                @if(isset($row['imagedata']['imagename']))
                                     <div class="pic-frame p-0 m-0 pe-0 pe-lg-3">
                                         <div class="pic-del-pos" data-id="{{ $row['id'] }}">
                                             <a href="{{ route('delpic', ['menuid' => $menu['id'], 'moduleid' => $module['id'], "type" => $moduletype['name'], "rowid" => $row['id']]) }}" class="p-0 m-0">
                                                 <i class="delete-button-pic d-inline-block align-middle"></i>
                                             </a>
                                         </div>
-                                        @if(Storage::disk('public')->exists('storage_news/'.$row['news_image']))
-                                            <img src="{{ Storage::url('public/storage_news/'.$row['news_image']) }}" alt="{{ $row['news_title'] }}" title="{{ $row['news_title'] }}" class="w-100">
+                                        @php
+                                            $filePath = 'images/' . $row['imagedata']['imagename'];
+                                        @endphp
+                                        @if(Storage::disk('public')->exists($filePath))
+                                            <img src="{{ Storage::url('public/'.$filePath) }}" alt="{{ $row['news_title'] }}" title="{{ $row['news_title'] }}" class="w-100">
                                         @else
                                             <img src="/img/nopic.png" alt="nopic" title="nopic" class="w-100">
                                         @endif
@@ -175,7 +181,7 @@
                 </div>
             @endforeach
         </div>
-        @if(count($moduledata)>4)
+        @if(count($moduledata)>3)
             @yield('controller-box')
         @endif
     </form>

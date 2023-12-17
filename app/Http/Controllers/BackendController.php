@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Services\Appservice;
 use App\Models\Menumoduletype;
@@ -12,6 +11,7 @@ use App\Models\Menulist;
 use App\Models\Menumodulelist;
 use App\Models\Module_news;
 use App\Models\Module_sendemail;
+use App\Models\Images;
 
 class BackendController extends Controller
 {
@@ -67,9 +67,7 @@ class BackendController extends Controller
 						];
 				}
 			}
-		}		
-
-		//dump($menumodulelist);
+		}
 		
 		return view('backend.admin_menus', [
 			'menulistid' => $menulistid,
@@ -144,6 +142,13 @@ class BackendController extends Controller
 				recursive_getdata($menuelement, $menusql, $isset_ids);
 			}
 
+			$menulist_ids = Menulist::pluck('id')->toArray();
+
+			// Pictures delete in Menulist
+			$delids = Menulist::whereNotIn('id', $isset_ids)->pluck('id');
+			Appservice::checkanddelete_images(Images::whereIn('id_menulist', $delids)->get());
+					
+			// Delete Menulist elements
 			Menulist::whereNotIn('id', $isset_ids)->delete();
 
 			//Menu JSON inserted
@@ -166,6 +171,13 @@ class BackendController extends Controller
 		// MENUMODULELIST SAVE
 		$sql_menulist_ids = Menulist::pluck('id');
 		// delete not issets menumodules
+
+		// Pictures delete in Modulelist
+		$delids = Menumodulelist::whereNotIn('id_menulist', $sql_menulist_ids)->pluck('id');
+
+		Appservice::checkanddelete_images(Images::whereIn('id_menulist', $delids)->get());
+
+		// Delete menumodulelist elements
 		Menumodulelist::whereNotIn('id_menulist', $sql_menulist_ids)->delete();
 
 		$sql_modulelist = Menumodulelist::all()->toArray();
@@ -209,6 +221,9 @@ class BackendController extends Controller
 		}
 	
 		$sql_left = array_diff($sql_modulelist_isd, $isset_list);
+		// Delete menumodulelist elements left
+		Appservice::checkanddelete_images(Images::whereIn('id_menumodulelist', $sql_left)->get());
+
 		Menumodulelist::whereIn('id', $sql_left)->delete();
 
 		// IF SELECTED MENULIST ELEMENT
@@ -242,13 +257,24 @@ class BackendController extends Controller
 			return redirect()->route('admin_menus');
 	
 		$module = $module->toArray();
-
+		//////////////
 		// NEWS MODULE
 		if ($module['id_moduletype'] == 1)
 		{
 			$moduledata = Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()->toArray();
+
+			// Insert images moduledata table
+			foreach ($moduledata as $key => $data_row) {
+				$image_id = $data_row['image_id'];
+				$image = Images::find($image_id);
+				if ($image)
+					$moduledata[$key]['imagedata'] = $image;
+			}
+			
 			$last_sequence = Module_news::where('id_menumodulelist', $moduleid)->max('sequence');
 		}
+		/////////////
+		// EMAIL SEND
 		else if ($module['id_moduletype'] == 2)
 		{
 			$moduledata = Module_sendemail::where('id_menumodulelist', $moduleid)->get()->toArray();
@@ -281,7 +307,7 @@ class BackendController extends Controller
 			return back();
 
 		$rowid = ($request->filled('rowid')) ? $request->rowid : null;
-		
+
 		// NEWS MODULE
 		if ($request->filled('moduletype') == 'news')
 		{	
@@ -300,25 +326,22 @@ class BackendController extends Controller
 					return back();
 				}
 	
-				$newfilename = null;
+				$new_image_id = null;
 
-				// IMAGE SAVE
+				// IMAGE SAVE (NEW)
 				if ($request->hasFile('new_image'))
 				{
 					$file = $request->file('new_image');
-	
-					// Upload Image
-					$response = Appservice::image_operations($file, $uploadimagesize, $uploadimagepath);
-	
-					if (!$response['status'])
+
+					$response = Images::image_upload($menuid, $moduleid, $rowid, $file, $uploadimagesize);
+
+					if(!$response['status'])
 					{
 						session()->flash('message', $response['message']);
-						return back();
+						return back();	
 					}
 					else
-					{
-						$newfilename = $response['newfilename'];
-					}
+						$new_image_id = $response['new_image_id'];
 				}
 	
 				$new_newsrow = new Module_news();
@@ -331,8 +354,8 @@ class BackendController extends Controller
 				$new_newsrow->news_title = $request->new_title;
 				$new_newsrow->news_message = $request->new_message;
 				$new_newsrow->news_link = $request->new_link;
-				if ($newfilename)
-					$new_newsrow->news_image = $newfilename;
+				if ($new_image_id)
+					$new_newsrow->image_id = $new_image_id;
 	
 				$new_newsrow->save();
 				
@@ -352,9 +375,23 @@ class BackendController extends Controller
 							'newfilename' => false,
 						];
 
-						if(isset($editrow['image']))
-							$response = Appservice::image_operations($editrow['image'], $uploadimagesize, $uploadimagepath);
+						$new_image_id = null;
 
+						if (isset($editrow['image']))
+						{
+							$file = $editrow['image'];
+
+							$response = Images::image_upload($menuid, $moduleid, $rowid, $file, $uploadimagesize);
+
+							if(!$response['status'])
+							{
+								session()->flash('message', $response['message']);
+								return back();	
+							}
+							else
+								$new_image_id = $response['new_image_id'];
+						}
+						
 						$actual_newsrow = Module_news::find($id);
 
 						$actual_newsrow['sequence'] = $sequence;
@@ -363,8 +400,8 @@ class BackendController extends Controller
 						$actual_newsrow['news_message'] = $editrow['message'];
 						$actual_newsrow['news_link'] = $editrow['link'];
 
-						if($response['status'])
-							$actual_newsrow['news_image'] = $response['newfilename'];
+						if ($new_image_id)
+							$actual_newsrow['image_id'] = $new_image_id;
 
 						$actual_newsrow->save();
 
@@ -401,37 +438,13 @@ class BackendController extends Controller
 		{
 			if (Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->exists())
 			{
-				$row = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
+				$modulerow = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
 
-				if (Storage::disk('public')->exists('storage_'.$type.'/'.$row->news_image))
-				{
-					// Delete image
-					Storage::disk('public')->delete('storage_'.$type.'/'.$row->news_image);
+				$response = Images::deletepicture_action($menuid, $moduleid, $rowid, $modulerow);
 
-					$row->news_image = null;
-					$row->save();
-
-					if (Appservice::actual_language() == 'hu') $message = 'Sikeres képtörlés.'; elseif (Appservice::actual_language() == 'en') $message = `Image deleted successfully.`;
-					else $message = 'Successfully!';
-		
-					session()->flash('message', $message);
-					return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
-				}
-				else
-				{	
-					$row = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
-					$row->news_image = null;
-					$row->save();
-
-					if (Appservice::actual_language() == 'hu') $message = 'Hiba a kép törlésekor.'; elseif (Appservice::actual_language() == 'en') $message = `Error deleting image.`;
-					else $message = 'Error!';
-		
-					session()->flash('message', $message);
-					return redirect()->route('admin_module', ['menuid' =>  $menuid, 'moduleid' => $moduleid]);
-				}
+				session()->flash('message', $response);
+				return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
 			}
-			else 
-				return back();
 		}
 
 		return back();

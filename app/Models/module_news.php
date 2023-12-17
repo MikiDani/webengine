@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Module_news extends Model
@@ -12,6 +11,6 @@ class Module_news extends Model
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'id_menumodulelist', 'sequence', 'news_datetime', 'news_title', 'news_message', 'news_image', 'news_link',
+		'id_menumodulelist', 'sequence', 'news_datetime', 'news_title', 'news_message', 'image_id', 'news_link',
 	];
 }

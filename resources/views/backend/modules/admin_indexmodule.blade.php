@@ -27,8 +27,8 @@
     </div>
 
     @if(session('message'))
-        <div class="p-3 ps-1 pb-0 m-0 text-start">
-            <span>{{ session('message') }}</span>
+        <div class="p-3 pb-0 m-0 text-center">
+            <i class="bi bi-chat-right-dots me-3"></i><span>{{ session('message') }}</span>
         </div>
     @endif
 

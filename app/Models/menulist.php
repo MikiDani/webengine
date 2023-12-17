@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Menumodulelist;
-use App\Models\Module_switch;
 
 class Menulist extends Model
 {
