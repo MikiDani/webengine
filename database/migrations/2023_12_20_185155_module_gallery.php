@@ -8,20 +8,23 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create("module_sendemail", function (Blueprint $table) {
+        Schema::create("module_gallery", function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('id_menumodulelist')->constrained('menumodulelist')->onDelete('cascade');
 
-            $table->longText('message')->nullable();
-            $table->boolean('newsletter')->nullable();
-
+            $table->integer('image_id');
+            $table->integer('sequence');
+            $table->string('picturename_hu');
+            $table->string('picturename_en');
+            $table->boolean('active');
+            
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists("module_sendemail");
+        Schema::dropIfExists("module_gallery");
     }
 };

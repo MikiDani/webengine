@@ -131,7 +131,6 @@ return [
 	'pagemenulist' => [
 		'textaddnewrootmenu' => 'Add new Menu Element',
 		'textsaveallchanges' => 'Save All Changes',
-		'textselectedmodule' => 'List of menu modules',
 		'textmenujsonisempty' => 'The menu is now empty.',
 		'textselectedelementlabel' => 'Element not selected.',
 		'textmoduletypelabel' => 'Module type:',
@@ -144,6 +143,7 @@ return [
 
 	'modules' => [
 		'news' => [
+			'textnewsmodulename' => 'News module',
 			'textaddnewnews' => 'Insert new news row',
 			'textnewstitle' => 'Title',
 			'textnewsmessage' => 'Message',
@@ -156,6 +156,20 @@ return [
 			'textallclose' => 'All close',
 			'texteditnewsdeletemessage' => 'Are you sure you want to delete the message?',
 			'textemptymessage' => `You deleted everything. Don't forget to save it.`,
+		],
+		'sendmail' => [
+			'textsendmailmodulename' => 'Send e-mail module',
+			'textnodatamessage' => 'No data added now.',
+			'textmodulemessage' => 'Display text in the module:',
+			'textnewslettermessage' => 'Should the newsletter subscription appear?',
+			'textsubmit' => 'Save changes',
+		],
+		'gallery' => [
+			'textgallerymodulename' => 'Gallery modul',
+			'textpicturename' => 'Image name',
+			'textnodatamessage' => 'There are currently no images uploaded.',
+			'textnewimagesubmit' => 'Upload a new image',
+			'textgallerysubmit' => 'Save changes',
 		],
 	],
 ];

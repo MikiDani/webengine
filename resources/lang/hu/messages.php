@@ -131,7 +131,6 @@ return [
 	'pagemenulist' => [
 		'textaddnewrootmenu' => 'Új menuelem hozzáadása',
 		'textsaveallchanges' => 'Minden változtatás mentése',
-		'textselectedmodule' => 'Menü modul lista',
 		'textmenujsonisempty' => 'A menü jelenleg üres.',
 		'textselectedelementlabel' => 'Nincsen kiválasztva menü.',
 		'textmoduletypelabel' => 'Modul típus:',
@@ -144,6 +143,7 @@ return [
 
 	'modules' => [
 		'news' => [
+			'textnewsmodulename' => 'Hírek modul',
 			'textaddnewnews' => 'Új hír hozzáadása',
 			'textnewstitle' => 'Cím',
 			'textnewsmessage' => 'Szöveg',
@@ -156,6 +156,20 @@ return [
 			'textallclose' => 'Összes bezár',
 			'texteditnewsdeletemessage' => 'Biztos törlöd a hírt?',
 			'textemptymessage' => 'Kitöröltél mindent. Ne felejts el rámenteni.',
+		],
+		'sendmail' => [
+			'textsendmailmodulename' => 'Email küldése modul',
+			'textnodatamessage' => 'Jelenleg nincsenek adatok megadva.',
+			'textmodulemessage' => 'Megjelenő szöveg a modulban:',
+			'textnewslettermessage' => 'Megjelenjen a feliratkozás hírlevélre?',
+			'textsubmit' => 'Módosítások mentése',
+		],
+		'gallery' => [
+			'textgallerymodulename' => 'Galéria modul',
+			'textpicturename' => 'Kép megnevezése',
+			'textnodatamessage' => 'Jelenleg nincsenek képek feltöltve.',
+			'textnewimagesubmit' => 'Új kép feltöltése',
+			'textgallerysubmit' => 'Módosítások mentése',
 		],
 	],
 ];

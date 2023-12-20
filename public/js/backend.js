@@ -197,6 +197,20 @@ $(document).ready(function() {
 		});
 	}
 
+	// ADD NEW MODULE VALIDATE
+	if ($('#sendemailmodule-form').length) {
+		$('#sendemailmodule-form').validate({
+			rules: {
+				message: {
+					required: false,
+				},
+				newsletter: {
+					required: false,
+				},
+			}
+		});
+	}
+
 	// VALIDATE MESSAGES
 	if (lang == 'hu') {
 		jQuery.extend(jQuery.validator.messages, {
@@ -316,13 +330,13 @@ $(document).ready(function() {
 			<div id="menumodulelist_${newModulelistid}" data-modulelist-id="${newModulelistid}" class="module-sortable_${menurowid} pos-relative bg-primary p-3 pt-1 m-0 mb-2 rounded">
 				<input type="hidden" name="edit[${menurowid}][${newModulelistid}][moduletype]" value="${moduleTypeId}">
 				<div class="pos-module-arrow">
-					<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
+					<i class="bi bi-arrows-move d-inline-block align-middle ms-1"></i>
 				</div>
 				<div class="pos-module-delete">
 					<i class="minus-button-module d-inline-block align-middle me-1" data-modulelist-id="${newModulelistid}"></i>
 				</div>
 				<div class="text-center text-small">modulelistid: ${newModulelistid}</div>
-				<span class="text-center">${textmoduletypelabel} <strong>${moduleTypeName}</strong></span>
+				<div class="text-center mb-1">${textmoduletypelabel} <strong>${moduleTypeName}</strong></div>
 				<div class="p-0 m-0 d-flex justify-content-start align-items-center">
 					<div class="p-0 m-0 width-10">HU:</div>
 					<div class="p-0 m-0 width-90">
@@ -335,7 +349,7 @@ $(document).ready(function() {
 						<input type="text" name="edit[${menurowid}][${newModulelistid}][modulename_en]" value="${new_modulename_en}" class="form-control">
 					</div>
 				</div>
-				<div id="selectmodule_${newModulelistid}" class="btn bg-warning mt-1 w-100">${textmustbesaved}</div>
+				<div id="selectmodule_${newModulelistid}" class="btn bg-warning mt-2 w-100">${textmustbesaved}</div>
 			</div>`;
 			return newElement;
 		}
@@ -458,10 +472,12 @@ $(document).ready(function() {
 			$("#new_menumodule").show()
 			let thisLi = clone.closest('.menu-sortable')
 			var thisId = thisLi.attr('data-id')
+			let moduleHeadText = (lang == 'hu') ? thisLi.find("input[name='menuname_hu']").val() : thisLi.find("input[name='menuname_en']").val();
+
 			myVar.selectedModuleId = thisId
 			$("#id_menulist").val(thisId)
 			$("div[class^='modulerow_']").each(function() {
-				$("#menu-module-label").html(`<div class="text-center">${textselectedmodule} <span class="text-small">id: ${thisId}</span></div>`)
+				$("#menu-module-label").html(`<div class="text-center">${moduleHeadText}<span class="text-small">&#160;&#160; id: ${thisId}</span></div>`)
 				if (thisId == $(this).attr('data-id')) { $(this).show() } else { $(this).hide() }
 			})
 		}

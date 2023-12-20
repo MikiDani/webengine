@@ -11,6 +11,7 @@ use App\Models\Menulist;
 use App\Models\Menumodulelist;
 use App\Models\Module_news;
 use App\Models\Module_sendemail;
+use App\Models\Module_gallery;
 use App\Models\Images;
 
 class BackendController extends Controller
@@ -46,25 +47,23 @@ class BackendController extends Controller
 			{
 				foreach ($menurow->connect_menumodulelist()->get() as $modulelistrow)
 				{
+					// COMMON DATA
+					$menumodulelist[$menurow->id][$modulelistrow->id] = [
+						'typeid' => $modulelistrow->id_moduletype,
+						'typename' =>  Menumoduletype::find($modulelistrow->id_moduletype)->name,
+						'sequence' => $modulelistrow->sequence,
+						'modulename_hu' => $modulelistrow->modulename_hu,
+						'modulename_en' => $modulelistrow->modulename_en,
+					];
+
 					if ($modulelistrow->id_moduletype == 1)
-						$menumodulelist[$menurow->id][$modulelistrow->id] = [
-							'typeid' => $modulelistrow->id_moduletype,
-							'typename' =>  Menumoduletype::find($modulelistrow->id_moduletype)->name,
-							'sequence' => $modulelistrow->sequence,
-							'modulename_hu' => $modulelistrow->modulename_hu,
-							'modulename_en' => $modulelistrow->modulename_en,
-							'value' => Module_news::where('id_menumodulelist', $modulelistrow->id)->get()
-						];
-					
+						$menumodulelist[$menurow->id][$modulelistrow->id]['value'] = Module_news::where('id_menumodulelist', $modulelistrow->id)->get();
+
 					if ($modulelistrow->id_moduletype == 2)
-						$menumodulelist[$menurow->id][$modulelistrow->id] = [
-							'typeid' => $modulelistrow->id_moduletype,
-							'typename' =>  Menumoduletype::find($modulelistrow->id_moduletype)->name,
-							'sequence' => $modulelistrow->sequence,
-							'modulename_hu' => $modulelistrow->modulename_hu,
-							'modulename_en' => $modulelistrow->modulename_en,
-							'value' => Module_sendemail::where('id_menumodulelist',	$modulelistrow->id)->get()
-						];
+						$menumodulelist[$menurow->id][$modulelistrow->id]['value'] = Module_sendemail::where('id_menumodulelist', $modulelistrow->id)->get();
+					
+					if ($modulelistrow->id_moduletype == 3)
+						$menumodulelist[$menurow->id][$modulelistrow->id]['value'] = Module_gallery::where('id_menumodulelist', $modulelistrow->id)->get();
 				}
 			}
 		}
@@ -256,7 +255,9 @@ class BackendController extends Controller
 		if ($module == null)
 			return redirect()->route('admin_menus');
 	
+		$last_sequence = null;
 		$module = $module->toArray();
+
 		//////////////
 		// NEWS MODULE
 		if ($module['id_moduletype'] == 1)
@@ -273,12 +274,15 @@ class BackendController extends Controller
 			
 			$last_sequence = Module_news::where('id_menumodulelist', $moduleid)->max('sequence');
 		}
+
 		/////////////
 		// EMAIL SEND
 		else if ($module['id_moduletype'] == 2)
-		{
-			$moduledata = Module_sendemail::where('id_menumodulelist', $moduleid)->get()->toArray();
-		} 
+			$moduledata = (Module_sendemail::where('id_menumodulelist', $moduleid)->first()) ? Module_sendemail::where('id_menumodulelist', $moduleid)->first()->toArray() : null;
+		/////////////
+		// GALLERY
+		else if ($module['id_moduletype'] == 3)
+			$moduledata = (Module_gallery::where('id_menumodulelist', $moduleid)->first()) ? Module_sendemail::where('id_menumodulelist', $moduleid)->first()->toArray() : null;
 		else
 			return back();
 
@@ -309,10 +313,9 @@ class BackendController extends Controller
 		$rowid = ($request->filled('rowid')) ? $request->rowid : null;
 
 		// NEWS MODULE
-		if ($request->filled('moduletype') == 'news')
+		if ($request->moduletype == 'news')
 		{	
 			$uploadimagesize = 600;
-			$uploadimagepath = 'storage_news';
 
 			if ($type == 'new')
 			{
@@ -414,10 +417,44 @@ class BackendController extends Controller
 
 		// SEND EMAIL MODULE
 		}
-		else if ($request->filled('moduletype') == 'sendemail')
+		else if ($request->moduletype == 'sendemail')
 		{
-			dd('SENDEMAIL');
-			// ....
+			$module = Menumodulelist::where('id', $moduleid)->first();
+
+			if (!$module)
+				return back();
+			
+			$moduletypename = Menumoduletype::where('id', $module->id_moduletype)->first()->name;
+			
+			if ($moduletypename != $request->moduletype)
+				return back();
+
+			$insert_message = ($request->filled('message')) ? $request->message : null;
+			$insert_newsletter = ($request->filled('newsletter') && $request->newsletter != null) ? true : false;
+
+			// WAS ALREDY IN THE DATABASE
+			if(Module_sendemail::where('id_menumodulelist', $module->id)->exists())
+			{
+				$thismodule = Module_sendemail::where('id_menumodulelist', $module->id)->first();
+				$thismodule->message = $insert_message;
+				$thismodule->newsletter = $insert_newsletter;
+				$thismodule->save();
+			}
+			// CREATE NEW ROW
+			else
+			{
+				$new_sendemail = new Module_sendemail();
+
+				$new_sendemail->id_menumodulelist = $moduleid;
+				$new_sendemail->message = $insert_message;
+				$new_sendemail->newsletter = $insert_newsletter;
+				$new_sendemail->save();
+			}
+			return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid]);
+		}
+		else if ($request->moduletype == 'gallery')
+		{
+			dd($request->all());
 		}
 	}
 

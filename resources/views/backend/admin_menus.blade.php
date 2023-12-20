@@ -41,7 +41,9 @@
 					</ul>
 				</div>
 				<div id="menu-module-box" data-menumodulelist-maxid="0" class="col-12 col-md-4 p-0 m-0 p-2 pt-0 p-lg-2 mt-1 bg-light rounded">
-					<div id="menu-module-label" class="p-0 m-0 ps-3 mb-2 label-minh bg-success text-white rounded text-bold text-center">{{ __('messages.pagemenulist.textselectedelementlabel') }}</div>
+					<div id="menu-module-label" class="p-0 m-0 ps-3 mb-2 label-minh bg-success text-white rounded text-bold text-center">
+						{{ __('messages.pagemenulist.textselectedelementlabel') }}
+					</div>
 					@if($menumodulelist)
 						@foreach($menumodulelist as $menurowid => $menurowvalue)
 							<div class="modulerow_{{ $menurowid }} p-0 m-0" data-id="{{ $menurowid }}" style="display:none;">
@@ -49,7 +51,7 @@
 									<div id="menumodulelist_{{ $modulelistid }}" data-modulelist-id="{{ $modulelistid }}" class="module-sortable_{{ $menurowid }} pos-relative bg-primary p-3 pt-1 m-0 mb-2 rounded">
 										<input type="hidden" name="edit[{{ $menurowid }}][{{ $modulelistid }}][moduletype]" value="{{ $modulevalue['typeid'] }}">
 										<div class="pos-module-arrow">
-											<i class="bi bi-arrows-move d-inline-block align-middle me-1"></i>
+											<i class="bi bi-arrows-move d-inline-block align-middle ms-1"></i>
 										</div>
 										<div class="pos-module-delete">
 											<i class="minus-button-module d-inline-block align-middle me-1" data-modulelist-id="{{ $modulelistid }}"></i>
@@ -68,7 +70,7 @@
 												<input type="text" name="edit[{{ $menurowid }}][{{ $modulelistid }}][modulename_en]" value="{{ $modulevalue['modulename_en'] }}" class="form-control">
 											</div>
 										</div>
-										<a id="selectmodule_{{ $menurowid }}" href="{{ route('admin_module', ['menuid' => $menurowid, 'moduleid' => $modulelistid]) }}" class="btn bg-selectmodulebutton mt-1 w-100">{{ __('messages.pagemenulist.textselectmodulebutton') }}</a>
+										<a id="selectmodule_{{ $menurowid }}" href="{{ route('admin_module', ['menuid' => $menurowid, 'moduleid' => $modulelistid]) }}" class="btn bg-selectmodulebutton mt-2 w-100">{{ __('messages.pagemenulist.textselectmodulebutton') }}</a>
 									</div>
 								@endforeach
 							</div>
@@ -98,7 +100,7 @@
 								<input id="new_modulename_en" type="text" name="new_modulename_en" value="{{-- javascript --}}" class="form-control" form="null">
 							</div>
 						</div>
-						<button id="add-module-button" type="button" class="btn btn-warning mt-1 w-100" >{{ __('messages.pagemenulist.textaddnew') }}</button>
+						<button id="add-module-button" type="button" class="btn btn-warning mt-2 w-100" >{{ __('messages.pagemenulist.textaddnew') }}</button>
 					</div>
 				</div>
 			</div>
@@ -106,8 +108,8 @@
 		<input id="id_menulist" type="hidden" name="id_menulist">
 	</form>
 	<script>
+		var lang ="{{ str_replace('_', '-', app()->getLocale())}}"
 		var page_menulistid = "{{ $menulistid }}"
-		var textselectedmodule = "{{ __('messages.pagemenulist.textselectedmodule') }}"
 		var textmoduletypelabel = "{{ __('messages.pagemenulist.textmoduletypelabel') }}"
 		var textmoduledeletealert = "{{ __('messages.pagemenulist.textmoduledeletealert') }}"
 		var textselectedelementlabel = "{{ __('messages.pagemenulist.textselectedelementlabel') }}"

@@ -11,6 +11,6 @@ class Module_sendemail extends Model
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'id_menumodulelist', 'sendemail_email', 'sendemail_label', 'sendemail_message',
+		'id_menumodulelist', 'message', 'newsletter',
 	];
 }
