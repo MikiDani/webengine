@@ -167,6 +167,8 @@ return [
 		'gallery' => [
 			'textgallerymodulename' => 'Gallery modul',
 			'textpicturename' => 'Image name',
+			'textpictureative' => 'The image is visible',
+			'textgalleryfiletext' => 'Select file:',
 			'textnodatamessage' => 'There are currently no images uploaded.',
 			'textnewimagesubmit' => 'Upload a new image',
 			'textgallerysubmit' => 'Save changes',

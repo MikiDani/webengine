@@ -653,6 +653,7 @@ $(document).ready(function() {
 			}
 		});
     }
+
 	/////////////////
 	// NEWS MODULE //
 	/////////////////
@@ -777,4 +778,21 @@ $(document).ready(function() {
 		});
 	}
 
+	////////////////////
+	// GALLERY MODULE //
+	////////////////////
+	if ($('#gallery-box').length) {
+
+		// ARANGEMENT GALLERY PICTURES ELEMENTS
+		var arrangementPicturesElements = function () {
+			$("#pictures-list").sortable({
+				connectWith: `.picture-sortable`
+			}).disableSelection();
+		}
+		arrangementPicturesElements() // first load
+	}
+
+	$('#collapseButton').click(function(){
+		$('.collapse-icon i').toggleClass('bi-chevron-bar-down bi-chevron-bar-up');
+	});
 })

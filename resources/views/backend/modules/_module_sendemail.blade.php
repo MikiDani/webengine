@@ -16,7 +16,7 @@
 			<label class="mb-2">{{ __('messages.modules.sendmail.textmodulemessage') }}</label>
 			<textarea name="message" class="form-control" rows="10">{{ $moduledata['message'] }}</textarea>
 			<div class="form-check d-flex justify-content-center align-items-center mt-2">
-				<input  type="checkbox" name="newsletter" value="on" class="form-check-input me-2" id="flexCheckDefault" @if($moduledata['newsletter']) checked @endif>
+				<input type="checkbox" name="newsletter" value="on" class="form-check-input me-2" id="flexCheckDefault" @if($moduledata['newsletter']) checked @endif>
 				<label class="form-check-label mx-2" for="flexCheckDefault">
 					{{ __('messages.modules.sendmail.textnewslettermessage') }}
 				</label>

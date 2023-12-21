@@ -262,7 +262,7 @@ class BackendController extends Controller
 		// NEWS MODULE
 		if ($module['id_moduletype'] == 1)
 		{
-			$moduledata = Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()->toArray();
+			$moduledata = (Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()) ? Module_news::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()->toArray() : null;
 
 			// Insert images moduledata table
 			foreach ($moduledata as $key => $data_row) {
@@ -282,7 +282,18 @@ class BackendController extends Controller
 		/////////////
 		// GALLERY
 		else if ($module['id_moduletype'] == 3)
-			$moduledata = (Module_gallery::where('id_menumodulelist', $moduleid)->first()) ? Module_sendemail::where('id_menumodulelist', $moduleid)->first()->toArray() : null;
+		{
+			$moduledata = (Module_gallery::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()) ? Module_gallery::where('id_menumodulelist', $moduleid)->orderBy('sequence', 'asc')->get()->toArray() : null;
+			// Insert images moduledata table
+			foreach ($moduledata as $key => $data_row) {
+				$image_id = $data_row['image_id'];
+				$image = Images::find($image_id);
+				if ($image)
+					$moduledata[$key]['imagedata'] = $image;
+			}
+
+			$last_sequence = Module_news::where('id_menumodulelist', $moduleid)->max('sequence');
+		}
 		else
 			return back();
 
@@ -325,7 +336,6 @@ class BackendController extends Controller
 						else $message = 'Error!';
 	
 					session()->flash('message', $message);
-	
 					return back();
 				}
 	
@@ -452,9 +462,76 @@ class BackendController extends Controller
 			}
 			return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid]);
 		}
+		// GALLERY MODULE
 		else if ($request->moduletype == 'gallery')
 		{
-			dd($request->all());
+			$uploadimagesize = 1200;
+
+			if ($type == 'new')
+			{
+				if (!$request->hasFile('new_image'))
+				{
+					if (Appservice::actual_language() == 'hu') $message = 'Nincsen kép kiválasztva.'; elseif (Appservice::actual_language() == 'en') $message = 'No image selected.!';
+						else $message = 'Error!';
+					
+					session()->flash('message', $message);
+					return back();
+				}
+	
+				$new_image_id = null;
+
+				// IMAGE SAVE (NEW)
+				if ($request->hasFile('new_image'))
+				{
+					$file = $request->file('new_image');
+
+					$response = Images::image_upload($menuid, $moduleid, $rowid, $file, $uploadimagesize);
+
+					if(!$response['status'])
+					{
+						session()->flash('message', $response['message']);
+						return back();	
+					}
+					else
+						$new_image_id = $response['new_image_id'];
+				}
+				
+				$new_image = new Module_gallery();
+				$sequence = intval($request->last_sequence) + 1;
+				$new_image->id_menumodulelist = $moduleid;
+				$new_image->image_id = $new_image_id;
+				$new_image->sequence = $sequence;
+				$new_image->picturename_hu = $request->picturename_hu;
+				$new_image->picturename_en = $request->picturename_en;
+				$new_image->active = true;
+				$new_image->save();
+				
+				return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
+			} 
+			else if($type == 'edit')
+			{
+				//dd($request->all(), $menuid, $moduleid);
+				
+				if(!empty($request->all()['edit']))
+				{
+					$sequence = 0;
+					foreach($request->all()['edit'] as $id => $editrow)
+					{
+						$active = (isset($editrow['active'])) ? 1 : 0;
+
+						$this_image = Module_gallery::find($id);
+						$this_image->sequence = $sequence;
+						$this_image->picturename_hu = $editrow['picturename_hu'];
+						$this_image->picturename_en = $editrow['picturename_en'];
+						$this_image->active = $active;
+						$this_image->save();
+						
+						$sequence++;
+					}
+				}
+
+				return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
+			}
 		}
 	}
 
@@ -476,12 +553,26 @@ class BackendController extends Controller
 			if (Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->exists())
 			{
 				$modulerow = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
-
 				$response = Images::deletepicture_action($menuid, $moduleid, $rowid, $modulerow);
-
-				session()->flash('message', $response);
-				return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
+				// Delete image Module table
+				$modulerow->image_id = null;
+				$modulerow->save();
 			}
+		}
+		elseif($type == 'gallery')
+		{
+			if (Module_gallery::where('id_menumodulelist', $moduleid)->where('id', $rowid)->exists())
+			{
+				$modulerow = Module_gallery::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
+				$response = Images::deletepicture_action($menuid, $moduleid, $rowid, $modulerow);
+				Module_gallery::find($modulerow->id)->delete();
+			}
+		}
+
+		if($modulerow && $response)
+		{			
+			session()->flash('message', $response);
+			return redirect()->route('admin_module', ['menuid' => $menuid, 'moduleid' => $moduleid, 'rowid' => $rowid]);
 		}
 
 		return back();

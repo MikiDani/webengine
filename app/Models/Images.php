@@ -13,7 +13,7 @@ class Images extends Model
 	public $timestamps		= true;
 
 	protected $fillable = [
-		'id_menulist', 'id_menumodulelist', 'id_module', 'imagename', 'sequence', 'imagetitle', 'first'
+		'id_menulist', 'id_menumodulelist', 'id_module', 'imagename', 'sequence', 'first'
 	];
 
 	static public function image_upload($menuid, $moduleid, $rowid, $file, $uploadimagesize)
@@ -54,40 +54,30 @@ class Images extends Model
 
 	static public function deletepicture_action($menuid, $moduleid, $rowid, $modulerow)
 	{
+		$success = false;
+
 		if (isset(Images::find($modulerow->image_id)->imagename) && Storage::disk('public')->exists('images/'.Images::find($modulerow->image_id)->imagename))
 		{
+			$success = true;
 			// Delete image hardware
-			Storage::disk('public')->delete('images/'.Images::find($modulerow->image_id)->imagename);
+			Storage::disk('public')->delete('images/'.Images::find($modulerow->image_id)->imagename);	
+		}
 
-			// Delete image Images table
-			$image = Images::find($modulerow->image_id);
-			if ($image)
-				$image->delete();
-
-			// Delete image Module table
-			$modulerow->image_id = null;
-			$modulerow->save();
-			
+		// Delete image Images table
+		$image = Images::find($modulerow->image_id);
+		if ($image)
+			$image->delete();
+		
+		if ($success)
+		{
 			if (Appservice::actual_language() == 'hu') $message = 'Sikeres képtörlés.'; elseif (Appservice::actual_language() == 'en') $message = `Image deleted successfully.`;
 			else $message = 'Successfully!';
 			
 			return $message;
 		}
 		else
-		{	
-			$modulerow = Module_news::where('id_menumodulelist', $moduleid)->where('id', $rowid)->first();
-			
-			// Delete image Images table
-			$image = Images::find($modulerow->image_id);
-
-			if ($image)
-				$image->delete();
-
-			// Delete image Module table
-			$modulerow->image_id = null;
-			$modulerow->save();
-
-			if (Appservice::actual_language() == 'hu') $message = 'Hiba a kép törlésekor. A kép már nem létezett!'; elseif (Appservice::actual_language() == 'en') $message = `Error deleting image. The picture no longer existed!`;
+		{
+			if (Appservice::actual_language() == 'hu') $message = 'Hiba a kép törlésekor. A kép már nem létezett fizikailag!'; elseif (Appservice::actual_language() == 'en') $message = `Error deleting image. The picture no longer existed!`;
 			else $message = 'Error!';
 
 			return $message;

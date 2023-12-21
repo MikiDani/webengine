@@ -13,11 +13,11 @@ return new class extends Migration
 
             $table->foreignId('id_menumodulelist')->constrained('menumodulelist')->onDelete('cascade');
 
-            $table->integer('image_id');
+            $table->integer('image_id')->nullable();
             $table->integer('sequence');
-            $table->string('picturename_hu');
-            $table->string('picturename_en');
-            $table->boolean('active');
+            $table->string('picturename_hu')->nullable();
+            $table->string('picturename_en')->nullable();
+            $table->boolean('active')->nullable();
             
             $table->timestamps();
         });

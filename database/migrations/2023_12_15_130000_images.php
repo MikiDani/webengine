@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('id_module')->nullable();
             $table->string('imagename', 50);
             $table->integer('sequence')->nullable();
-            $table->string('imagetitle', 100)->nullable();
             $table->boolean('first')->nullable();
 
             $table->timestamps();

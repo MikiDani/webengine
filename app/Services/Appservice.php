@@ -39,6 +39,10 @@ class Appservice
             
             $height = null;
             list($originalwidth, $originalheight) = getimagesize($file->getPathname());
+
+            // ORIGINAL SIZE MAX. NO DISTORTION
+            $width = ($originalwidth > $width) ? $width : $originalwidth;
+
             $height = $width * $originalheight / $originalwidth;
         
             $resizedimage = imagecreatetruecolor($width, $height);
