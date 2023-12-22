@@ -166,7 +166,7 @@ return [
 		],
 		'gallery' => [
 			'textgallerymodulename' => 'Galéria modul',
-			'textpicturename' => 'Kép megnevezése',
+			'textpicturename' => 'Kép címe',
 			'textpictureative' => 'Látható a kép',
 			'textgalleryfiletext' => 'Fájl kiválasztása:',
 			'textnodatamessage' => 'Jelenleg nincsenek képek feltöltve.',
