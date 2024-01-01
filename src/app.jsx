@@ -1,5 +1,7 @@
 function AppComponent () {
-    return <h1 className={'text-center'}>Helló Valakika3!</h1>;
+    return (
+        <div className="p-3 bg-info"><h1 className={'text-center'}>Helló Valakika6! Majd itt megy a feljesztés.</h1></div>
+    );
 }
 
 ReactDOM.render(

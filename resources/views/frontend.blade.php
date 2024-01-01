@@ -33,7 +33,7 @@
 				@php session()->forget('message'); @endphp
 			@endif
 		</div>
-		<div id="app-container"></div>	{{-- REACT --}}
+		<div id="app-container"></div>  {{-- REACT --}}
 	</div>
 	
 	<script src="/modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -41,9 +41,9 @@
 
 	<script src="/modules/react/react.development.js"></script>
 	<script src="/modules/react/react-dom.development.js"></script>
-	<script src="/js/app.js"></script>
 
-	<script src="/js/admin.js"></script>
+	<script src="/js/app.js"></script>  {{-- REACT --}}
+
 	<script>
 		window.jQuery.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 	</script>
