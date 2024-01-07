@@ -3,6 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\FrontendController;
+
+// FrontendPage
+
+Route::get('/loaddata', [FrontendController::class, 'loadData']);
+
+// Admin
 
 Route::post('/login', [AuthenticationController::class,'api_login']);
 Route::post('/register', [AuthenticationController::class,'api_register']);
