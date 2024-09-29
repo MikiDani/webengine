@@ -1,0 +1,40 @@
+
+$primary: #1fb71f;
+$secondary: #5cf45c;
+$warning: gold;
+$danger: #ff4136;
+$selected: #0ee8ec;
+$test: #e436ff;
+
+// milk coofe:
+// #f0dcae
+// #bba24d
+// #ba9741
+
+// blue turq: #02aed2
+
+$theme-colors: (
+	"primary": $primary,
+	"secondary": $secondary,
+	"warning": $warning,
+	"danger": $danger,
+	);
+
+$color-01: #191919;
+$color-gold-01: gold;
+$color-underline-primary: $primary;
+$color-underline-gold: gold;
+
+
+@import "../modules/bootstrap/scss/bootstrap";
+
+@import 'backend';
+
+.full-win {
+	width: 100%;
+	height:100vh;
+}
+
+.card {
+	max-width: 1000px;
+}
